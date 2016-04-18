@@ -24,7 +24,7 @@
 #include <gl\glu.h>												// Header File For The GLu32 Library
 #include <gl\glext.h>
 #include "baseState.h"
-#include "..\appbase.h"
+#include "..\app\appbase.h"
 #include "..\input\input.h"
 
 
