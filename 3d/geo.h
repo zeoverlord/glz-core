@@ -36,8 +36,8 @@ using namespace std;
 		// every VAO funtion resets the vao to 0 to prevent problems unless otherwise specified
 
 typedef struct{
-	int active;
 	glzVAOType type;
+	unsigned int vao;
 }vaostatus;
 
 typedef struct
@@ -128,7 +128,7 @@ texture_transform glzMakeTT(glzTTType type, float u_scale, float v_scale, float 
 	void glzDirectPointVectorRender(vector<point3> pdata);
 	void glzDirectCubeRender(float X, float Y, float Z, float W, float H, float D, texture_transform tt, unsigned int atlas); // does exactly you think it does
 
-	void glzKillVAO(unsigned int vao);
+	void glzKillVAO(unsigned int inVao);
 	void glzKillAllVAO(void);
 
 	void glzDrawVAO(long enteties, unsigned int vao, unsigned int type);
