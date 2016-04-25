@@ -1,6 +1,5 @@
 
 Before 2d game project:
-	Fix tile rendering - pehaps done, will have to test on nvidia hardware
 	Sound engine
 	More 2d layouting stuff
 		text that fits in a box
