@@ -8,6 +8,7 @@ Before 2d game project:
 
 
 3D Object class that takes care of object loading and management instead of having individual raw VAO
+	move individual primitive generation to their own files
 
 Resource manager for
 	3d Objects
