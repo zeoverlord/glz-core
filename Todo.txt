@@ -1,8 +1,16 @@
 
 Before 2d game project:
 	Sound engine
+		Sound manager - like texure manager
+		soundId = PlaySound(sound, stereo, volume, pitch);  // pich is 440 normative
+		soundId = PlaySoundLoop(sound, stereo, volume, pitch);  // looping sound
+		stopSound(soundId);
+		stopAllSound(Sound);
+		changeSound(soundId, stereo, volume, pitch)
+		changeSoundTo(soundId, stereo, volume, pitch, time) // change all sound data over time
 	More 2d layouting stuff
 		text that fits in a box
+	Move to own namespace
 
 
 
