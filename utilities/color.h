@@ -23,6 +23,8 @@
 
 #include "type.h"
 
+
+
 // todo implement http://www.color-hex.com/color-names.html colors
 // at least the main 16 colors
 
@@ -40,50 +42,51 @@
 #define COL_CYAN		glzColor(0.0f, 1.0f, 1.0f, 1.0f)
 #define COL_YELLOW		glzColor(1.0f, 1.0f, 0.0f, 1.0f)
 
+namespace GLZ
+{
 
-using namespace std;
-class glzColor {
-public:
-	float r, g, b, a;
-	
-
-	glzColor() : r(0.0), g(0.0), b(0.0), a(1.0) {}
-	//color() : r(0.0), g(0.0), b(0.0) {}
-	glzColor(float rin, float gin, float bin, float ain) : r(rin), g(gin), b(bin), a(ain) {}
-
-	// these shouldn't really be used for blending
-	glzColor glzColor::operator() (float inR, float inG, float inB, float inA) { r = inR; g = inG; b = inB; a = inA; return *this; }
-	glzColor glzColor::operator() (float inR, float inG, float inB) { r = inR; g = inG; b = inB; return *this; }
+	class glzColor {
+	public:
+		float r, g, b, a;
 
 
-	glzColor glzColor::operator+ (glzColor c) { return glzColor(r + c.r, g + c.g, b + c.b, a + c.a); }
-	glzColor glzColor::operator+= (glzColor c) { r += c.r; g += c.g; b += c.b; a += c.a; return *this; }
-	glzColor glzColor::operator+ (float c) { return glzColor(r + c, g + c, b + c, a); }
-	glzColor glzColor::operator+= (float c) { r += c; g += c; b += c;  return *this; }
+		glzColor() : r(0.0), g(0.0), b(0.0), a(1.0) {}
+		//color() : r(0.0), g(0.0), b(0.0) {}
+		glzColor(float rin, float gin, float bin, float ain) : r(rin), g(gin), b(bin), a(ain) {}
 
-	glzColor glzColor::operator- (glzColor c) { return glzColor(r - c.r, g - c.g, b - c.b, a - c.a); }
-	glzColor glzColor::operator-= (glzColor c) { r -= c.r; g -= c.g; b -= c.b; a -= c.a; return *this; }
-	glzColor glzColor::operator- (float c) { return glzColor(r - c, g - c, b - c, a); }
-	glzColor glzColor::operator-= (float c) { r -= c; g -= c; b -= c; return *this; }
-
-	glzColor glzColor::operator* (glzColor c) { return glzColor(r * c.r, g * c.g, b * c.b, a * c.a); }
-	glzColor glzColor::operator*= (glzColor c) { r *= c.r; g *= c.g; b *= c.b; a *= c.a; return *this; }
-	glzColor glzColor::operator* (float c) { return glzColor(r * c, g * c, b * c, a * c); }
-	glzColor glzColor::operator*= (float c) { r *= c; g *= c; b *= c; return *this; }
-
-	glzColor glzColor::operator/ (glzColor c) { return glzColor(r / c.r, g / c.g, b / c.b, a / c.a); }
-	glzColor glzColor::operator/= (glzColor c) { r /= c.r; g /= c.g; b /= c.b; a /= c.a; return *this; }
-	glzColor glzColor::operator/ (float c) { return glzColor(r / c, g / c, b / c, a); }
-	glzColor glzColor::operator/= (float c) { r /= c; g /= c; b /= c; return *this; }
+		// these shouldn't really be used for blending
+		glzColor glzColor::operator() (float inR, float inG, float inB, float inA) { r = inR; g = inG; b = inB; a = inA; return *this; }
+		glzColor glzColor::operator() (float inR, float inG, float inB) { r = inR; g = inG; b = inB; return *this; }
 
 
-};
+		glzColor glzColor::operator+ (glzColor c) { return glzColor(r + c.r, g + c.g, b + c.b, a + c.a); }
+		glzColor glzColor::operator+= (glzColor c) { r += c.r; g += c.g; b += c.b; a += c.a; return *this; }
+		glzColor glzColor::operator+ (float c) { return glzColor(r + c, g + c, b + c, a); }
+		glzColor glzColor::operator+= (float c) { r += c; g += c; b += c;  return *this; }
+
+		glzColor glzColor::operator- (glzColor c) { return glzColor(r - c.r, g - c.g, b - c.b, a - c.a); }
+		glzColor glzColor::operator-= (glzColor c) { r -= c.r; g -= c.g; b -= c.b; a -= c.a; return *this; }
+		glzColor glzColor::operator- (float c) { return glzColor(r - c, g - c, b - c, a); }
+		glzColor glzColor::operator-= (float c) { r -= c; g -= c; b -= c; return *this; }
+
+		glzColor glzColor::operator* (glzColor c) { return glzColor(r * c.r, g * c.g, b * c.b, a * c.a); }
+		glzColor glzColor::operator*= (glzColor c) { r *= c.r; g *= c.g; b *= c.b; a *= c.a; return *this; }
+		glzColor glzColor::operator* (float c) { return glzColor(r * c, g * c, b * c, a * c); }
+		glzColor glzColor::operator*= (float c) { r *= c; g *= c; b *= c; return *this; }
+
+		glzColor glzColor::operator/ (glzColor c) { return glzColor(r / c.r, g / c.g, b / c.b, a / c.a); }
+		glzColor glzColor::operator/= (glzColor c) { r /= c.r; g /= c.g; b /= c.b; a /= c.a; return *this; }
+		glzColor glzColor::operator/ (float c) { return glzColor(r / c, g / c, b / c, a); }
+		glzColor glzColor::operator/= (float c) { r /= c; g /= c; b /= c; return *this; }
 
 
-inline glzColor operator+ (float c, glzColor a) { return glzColor(a.r + c, a.g + c, a.b + c, a.a); }
-inline glzColor operator- (float c, glzColor a) { return glzColor(a.r - c, a.g - c, a.b - c, a.a); }
-inline glzColor operator* (float c, glzColor a) { return glzColor(a.r * c, a.g * c, a.b * c, a.a * c); }
-inline glzColor operator/ (float c, glzColor a) { return glzColor(c / a.r, c / a.g, c / a.b, a.a); }
+	};
 
+
+	inline glzColor operator+ (float c, glzColor a) { return glzColor(a.r + c, a.g + c, a.b + c, a.a); }
+	inline glzColor operator- (float c, glzColor a) { return glzColor(a.r - c, a.g - c, a.b - c, a.a); }
+	inline glzColor operator* (float c, glzColor a) { return glzColor(a.r * c, a.g * c, a.b * c, a.a * c); }
+	inline glzColor operator/ (float c, glzColor a) { return glzColor(c / a.r, c / a.g, c / a.b, a.a); }
+}
 
 // Todo: pull in color conversion from glz

@@ -28,70 +28,75 @@
 #include <gl/glu.h>														// Header File For The GLu32 Library
 #include <gl/glext.h>
 
-typedef struct
+namespace GLZ
 {
-	string name;
-	string filename;
-	glzTexFilter filter;
-	int priority; // 0 is alreaady loaded, 1 is higest priority
-} txLoadContainer;
 
-
-class resinit
-{
-public:
-
-	unsigned int defaulttexture;
-	unsigned int idcounter;
-	bool loaded;
-
-	resinit()
+	typedef struct
 	{
-		idcounter = 0;
-		loaded = false;
-		defaulttexture = 0;
-	}
-	~resinit()
-	{
-	//	glDeleteTextures(1, &defaulttexture);
-	}
+		std::string name;
+		std::string filename;
+		glzTexFilter filter;
+		int priority; // 0 is alreaady loaded, 1 is higest priority
+	} txLoadContainer;
 
-	unsigned int getNewId(void)	{idcounter++; return idcounter;}
 
-	unsigned int getDefaultexture()
+	class resinit
 	{
-		if (!loaded)
-		{ 
-			defaulttexture = glzGetDefaultTextturehandle();
-			loaded = true;
+	public:
+
+		unsigned int defaulttexture;
+		unsigned int idcounter;
+		bool loaded;
+
+		resinit()
+		{
+			idcounter = 0;
+			loaded = false;
+			defaulttexture = 0;
+		}
+		~resinit()
+		{
+			//	glDeleteTextures(1, &defaulttexture);
 		}
 
-		return defaulttexture;
+		unsigned int getNewId(void)	{ idcounter++; return idcounter; }
 
-	}
+		unsigned int getDefaultexture()
+		{
+			if(!loaded)
+			{
+				defaulttexture = glzGetDefaultTextturehandle();
+				loaded = true;
+			}
 
-};
+			return defaulttexture;
+
+		}
+
+	};
 
 
 
-class glzResourcemanager
-{
+	class glzResourcemanager
+	{
 
 
-public:
+	public:
 
-	void createTexture(string name, string filename, glzTexFilter filter);
-	void createTexture(string name, string filename, glzTexFilter filter, int priority);
+		void createTexture(std::string name, std::string filename, glzTexFilter filter);
+		void createTexture(std::string name, std::string filename, glzTexFilter filter, int priority);
 
 
-	texturecontainer* gettexture(string name);
+		texturecontainer* gettexture(std::string name);
 
-	unsigned int gettextureHandle(string name);
+		unsigned int gettextureHandle(std::string name);
 
-	void manipulate(string name);
+		void manipulate(std::string name);
 
-	bool load_one(void);
+		bool load_one(void);
 
-	void load_all(void);
+		void load_all(void);
 
-};
+	};
+
+}

@@ -23,84 +23,87 @@
 
 #include "type.h"
 #include "vectormath.h"
-using namespace std;
 
-class glzSprite{ //atlassprite class
+namespace GLZ
+{
 
-private:
+	class glzSprite{ //atlassprite class
 
-
-public:
-
-	// an atlas is defined by 2 tex coords, depth is used in case a texture array is used, coord are in the following config
-	// c d
-	// a b
-	// with a being 0,0 and d is 1,1
-
-	tex2 a, b, c, d;
-	float depth;
-
-	glzSprite() : a(tex2(0.0, 0.0)), b(tex2(1.0, 0.0)), c(tex2(0.0, 1.0)), d(tex2(1.0, 1.0)), depth(0.0){} // default numbers
-	glzSprite(tex2 ain, tex2 bin, tex2 cin, tex2 din, float depthin) : a{ ain }, b{ bin }, c{ cin }, d{ din }, depth{ depthin }{} // direct initialization
-	glzSprite(tex2 pos, tex2 dim, float depthin) : a{ tex2(pos.u, pos.v) }, b{ tex2(pos.u + dim.u, pos.v) }, c{ tex2(pos.u, pos.v + dim.v) }, d{ tex2(pos.u + dim.u, pos.v + dim.v) }, depth{ depthin }{} // simpler initialization
-
-	glzSprite(glzOrigin origin);
-	glzSprite(unsigned int xdim, unsigned int ydim, unsigned int atlas, float depthin); // grid atlas initialization
-	glzSprite(unsigned int xdim, unsigned int ydim, unsigned int atlas, float depthin, glzOrigin origin);  // grid atlas initialization with origin
-
-	void make_polygons(vector<poly3> *pdata, float x, float y, float width, float height, int group, int atlas);
-	void make_polygons(vector<poly3> *pdata, float x, float y, float width, float height, int group, int atlas, glzMatrix m);
-	void make_polygons(vector<poly3> *pdata, float x, float y, float width, float height, int group, int atlas, glzOrigin origin, glzMatrix m);
-};
+	private:
 
 
-class glzSpriteList{ //atlassprite class
+	public:
 
-private:
+		// an atlas is defined by 2 tex coords, depth is used in case a texture array is used, coord are in the following config
+		// c d
+		// a b
+		// with a being 0,0 and d is 1,1
 
+		tex2 a, b, c, d;
+		float depth;
 
-public:
+		glzSprite() : a(tex2(0.0, 0.0)), b(tex2(1.0, 0.0)), c(tex2(0.0, 1.0)), d(tex2(1.0, 1.0)), depth(0.0){} // default numbers
+		glzSprite(tex2 ain, tex2 bin, tex2 cin, tex2 din, float depthin) : a{ ain }, b{ bin }, c{ cin }, d{ din }, depth{ depthin }{} // direct initialization
+		glzSprite(tex2 pos, tex2 dim, float depthin) : a{ tex2(pos.u, pos.v) }, b{ tex2(pos.u + dim.u, pos.v) }, c{ tex2(pos.u, pos.v + dim.v) }, d{ tex2(pos.u + dim.u, pos.v + dim.v) }, depth{ depthin }{} // simpler initialization
 
+		glzSprite(glzOrigin origin);
+		glzSprite(unsigned int xdim, unsigned int ydim, unsigned int atlas, float depthin); // grid atlas initialization
+		glzSprite(unsigned int xdim, unsigned int ydim, unsigned int atlas, float depthin, glzOrigin origin);  // grid atlas initialization with origin
 
-	vector<glzSprite> map;
-
-	glzSpriteList() {} // default numbers
-	glzSpriteList(glzSprite a) { map.push_back(a); } // direct initialization
-	glzSpriteList(int w, int h); // direct initialization with preset
-
-	glzSpriteList(int w, int h, int v[], int n); // direct initialization with preset
-
-
-	void addsprite(glzSprite a) { map.push_back(a); }
-
-	glzSprite get_sprite(int frame)
-	{
-		return map.at(frame);
-	}
-
-};
+		void make_polygons(std::vector<poly3> *pdata, float x, float y, float width, float height, int group, int atlas);
+		void make_polygons(std::vector<poly3> *pdata, float x, float y, float width, float height, int group, int atlas, glzMatrix m);
+		void make_polygons(std::vector<poly3> *pdata, float x, float y, float width, float height, int group, int atlas, glzOrigin origin, glzMatrix m);
+	};
 
 
-class glzSpriteanimationList{ //atlassprite class
+	class glzSpriteList{ //atlassprite class
 
-private:
-
-
-public:
-
-	vector<glzSpriteList> map;
-
-	glzSpriteanimationList() {} // default numbers
-	glzSpriteanimationList(glzSpriteList a) { map.push_back(a); } // direct initialization
-	glzSpriteanimationList(glzSprite a) { glzSpriteList b(a); map.push_back(b); } // direct initialization
-//	glzSpriteanimationList(int w, int h); // direct initialization with preset
+	private:
 
 
-	void addsprite(glzSpriteList a) { map.push_back(a); }
+	public:
 
-	glzSprite get_sprite(int animation, int frame)
-	{
-		return map.at(animation).get_sprite(frame);
-	}
 
-};
+		std::vector<glzSprite> map;
+
+		glzSpriteList() {} // default numbers
+		glzSpriteList(glzSprite a) { map.push_back(a); } // direct initialization
+		glzSpriteList(int w, int h); // direct initialization with preset
+
+		glzSpriteList(int w, int h, int v[], int n); // direct initialization with preset
+
+
+		void addsprite(glzSprite a) { map.push_back(a); }
+
+		glzSprite get_sprite(int frame)
+		{
+			return map.at(frame);
+		}
+
+	};
+
+
+	class glzSpriteanimationList{ //atlassprite class
+
+	private:
+
+
+	public:
+
+		std::vector<glzSpriteList> map;
+
+		glzSpriteanimationList() {} // default numbers
+		glzSpriteanimationList(glzSpriteList a) { map.push_back(a); } // direct initialization
+		glzSpriteanimationList(glzSprite a) { glzSpriteList b(a); map.push_back(b); } // direct initialization
+		//	glzSpriteanimationList(int w, int h); // direct initialization with preset
+
+
+		void addsprite(glzSpriteList a) { map.push_back(a); }
+
+		glzSprite get_sprite(int animation, int frame)
+		{
+			return map.at(animation).get_sprite(frame);
+		}
+
+	};
+}

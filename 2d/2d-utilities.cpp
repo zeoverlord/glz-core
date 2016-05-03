@@ -29,136 +29,139 @@
 
 
 // backdrops are usefull, if you don't have the time to write a 2D renderer then just cheat with a texture backdrop instead
-
-
-void glzBackdrop(unsigned int texture, glzBlendingMode blend, glzColor color)
-{
-	glzMatrix mt;
-	mt.LoadIdentity();
-	mt.translate(0.0f, 0.0f, 0.0f);
-	mt.scale(2.0f, 2.0f, 1.0f);
-
-	glzBackdrop(texture, mt, blend, color);
-	return;
-
-}
-
-
-void glzBackdrop(unsigned int texture, glzMatrix mat, glzBlendingMode blend, glzColor color)
-{
-	glzSprite sprite;
-	glzMatrix m;
-
-	setblendingmode(blend);
-	glzShaderUseBasic();
-
-	m.LoadIdentity();
-	unsigned int basic_program = glzShaderReurnBasic();
-	glDisable(GL_DEPTH_TEST);
-
-	glzUniformMatrix4fv(basic_program, "projMat", mat);
-	glzUniform1i(basic_program, "texunit0", 0);
-	glzUniform4f(basic_program, "color", color);
-	glzDirectSpriteRender(m, texture, sprite, glzOrigin::CENTERED);
-
-	glEnable(GL_DEPTH_TEST);
-	glDisable(GL_BLEND);
-	return;
-}
-
-void glzBackdrop(texturecontainer *texture, glzBlendingMode blend, glzColor color)
+namespace GLZ
 {
 
-	glzMatrix mt;
-	mt.LoadIdentity();
-	mt.translate(0.0f, 0.0f, 0.0f);
-	mt.scale(2.0f, 2.0f, 1.0f);
+	void glzBackdrop(unsigned int texture, glzBlendingMode blend, glzColor color)
+	{
+		glzMatrix mt;
+		mt.LoadIdentity();
+		mt.translate(0.0f, 0.0f, 0.0f);
+		mt.scale(2.0f, 2.0f, 1.0f);
 
-	glzBackdrop(texture, mt, blend, color);
-	return;
-}
+		glzBackdrop(texture, mt, blend, color);
+		return;
+
+	}
 
 
+	void glzBackdrop(unsigned int texture, glzMatrix mat, glzBlendingMode blend, glzColor color)
+	{
+		glzSprite sprite;
+		glzMatrix m;
 
-void glzBackdrop(texturecontainer *texture, glzMatrix mat, glzBlendingMode blend, glzColor color)
-{
-	glzSprite sprite;
-	glzMatrix m;
+		setblendingmode(blend);
+		glzShaderUseBasic();
 
-	setblendingmode(blend);
-	glzShaderUseBasic();
+		m.LoadIdentity();
+		unsigned int basic_program = glzShaderReurnBasic();
+		glDisable(GL_DEPTH_TEST);
 
-	m.LoadIdentity();
-	unsigned int basic_program = glzShaderReurnBasic();
-	glDisable(GL_DEPTH_TEST);
+		glzUniformMatrix4fv(basic_program, "projMat", mat);
+		glzUniform1i(basic_program, "texunit0", 0);
+		glzUniform4f(basic_program, "color", color);
+		glzDirectSpriteRender(m, texture, sprite, glzOrigin::CENTERED);
 
-	glzUniformMatrix4fv(basic_program, "projMat", mat);
-	glzUniform1i(basic_program, "texunit0", 0);
-	glzUniform4f(basic_program, "color", color);
-	glzDirectSpriteRender(m, texture->handle, sprite, glzOrigin::CENTERED);
+		glEnable(GL_DEPTH_TEST);
+		glDisable(GL_BLEND);
+		return;
+	}
 
-	glEnable(GL_DEPTH_TEST);
-	glDisable(GL_BLEND);
-	return;
-}
+	void glzBackdrop(texturecontainer *texture, glzBlendingMode blend, glzColor color)
+	{
 
-void glzDrawSprite(texturecontainer *texture, float x, float y, float scale, float aspect, glzBlendingMode blend, glzColor color)
-{
-	glzDrawSprite(texture, glzSprite(), x, y, scale, aspect, blend, color);
-}
+		glzMatrix mt;
+		mt.LoadIdentity();
+		mt.translate(0.0f, 0.0f, 0.0f);
+		mt.scale(2.0f, 2.0f, 1.0f);
 
-void glzDrawSprite(texturecontainer *texture, glzSprite sprite, float x, float y, float scale, float aspect, glzBlendingMode blend, glzColor color)
-{
-	glzMatrix m;
-	glzMatrix mt;
-	glzColor blendcolor(1.0f, 1.0f, 1.0f, 1.0f);
-
-	setblendingmode(blend);
-	glzShaderUseBasic();
-
-	m.LoadIdentity();
-
-	mt.LoadIdentity();
-	mt.translate(x,y,1.0f);
-	//mt.scale(scale/aspect, scale, 1.0f);
-
-	unsigned int basic_program = glzShaderReurnBasic();
-	glDisable(GL_DEPTH_TEST);
-	glzUniformMatrix4fv(basic_program, "projMat", mt);
-	glzUniform1i(basic_program, "texunit0", 0);
-	glzUniform4f(basic_program, "color", blendcolor);
-	glzDirectSpriteRender(m, texture->handle, sprite, scale, scale*aspect, glzOrigin::CENTERED);
-
-	glEnable(GL_DEPTH_TEST);
-	glDisable(GL_BLEND);
-	return;
-}
+		glzBackdrop(texture, mt, blend, color);
+		return;
+	}
 
 
 
-void glzDrawText(string text, vert3 pos, float scale, float kern, float aspect, texturecontainer *font, glzColor color, glzOrigin origin)
-{
-	glzDrawText(text, pos.x, pos.y, scale, kern, aspect, font, color, origin);
-}
+	void glzBackdrop(texturecontainer *texture, glzMatrix mat, glzBlendingMode blend, glzColor color)
+	{
+		glzSprite sprite;
+		glzMatrix m;
 
-void glzDrawText(string text, float x, float y, float scale, float kern, float aspect, texturecontainer *font, glzColor color, glzOrigin origin)
-{
-	glzShaderUseBasic();
-	glzMatrix m;
-	m.LoadIdentity();
-	m.ortho(-0.5f, 0.5f, -0.5f, 0.5f, 0.0f, 1.0f);
-	m.translate(x, y, 0);
+		setblendingmode(blend);
+		glzShaderUseBasic();
 
-	unsigned int basic_program = glzShaderReurnBasic();
+		m.LoadIdentity();
+		unsigned int basic_program = glzShaderReurnBasic();
+		glDisable(GL_DEPTH_TEST);
 
-	glzUniformMatrix4fv(basic_program, "projMat", m);
-	glzUniform1i(basic_program, "texunit0", 0);
-	glzUniform4f(basic_program, "color", color);
+		glzUniformMatrix4fv(basic_program, "projMat", mat);
+		glzUniform1i(basic_program, "texunit0", 0);
+		glzUniform4f(basic_program, "color", color);
+		glzDirectSpriteRender(m, texture->handle, sprite, glzOrigin::CENTERED);
 
-	glBindTexture(GL_TEXTURE_2D, font->handle);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glEnable(GL_BLEND);
-	glzDirectDrawText(text, scale, aspect, kern, origin);
-	glDisable(GL_BLEND);
+		glEnable(GL_DEPTH_TEST);
+		glDisable(GL_BLEND);
+		return;
+	}
+
+	void glzDrawSprite(texturecontainer *texture, float x, float y, float scale, float aspect, glzBlendingMode blend, glzColor color)
+	{
+		glzDrawSprite(texture, glzSprite(), x, y, scale, aspect, blend, color);
+	}
+
+	void glzDrawSprite(texturecontainer *texture, glzSprite sprite, float x, float y, float scale, float aspect, glzBlendingMode blend, glzColor color)
+	{
+		glzMatrix m;
+		glzMatrix mt;
+		glzColor blendcolor(1.0f, 1.0f, 1.0f, 1.0f);
+
+		setblendingmode(blend);
+		glzShaderUseBasic();
+
+		m.LoadIdentity();
+
+		mt.LoadIdentity();
+		mt.translate(x, y, 1.0f);
+		//mt.scale(scale/aspect, scale, 1.0f);
+
+		unsigned int basic_program = glzShaderReurnBasic();
+		glDisable(GL_DEPTH_TEST);
+		glzUniformMatrix4fv(basic_program, "projMat", mt);
+		glzUniform1i(basic_program, "texunit0", 0);
+		glzUniform4f(basic_program, "color", blendcolor);
+		glzDirectSpriteRender(m, texture->handle, sprite, scale, scale*aspect, glzOrigin::CENTERED);
+
+		glEnable(GL_DEPTH_TEST);
+		glDisable(GL_BLEND);
+		return;
+	}
+
+
+
+	void glzDrawText(std::string text, vert3 pos, float scale, float kern, float aspect, texturecontainer *font, glzColor color, glzOrigin origin)
+	{
+		glzDrawText(text, pos.x, pos.y, scale, kern, aspect, font, color, origin);
+	}
+
+	void glzDrawText(std::string text, float x, float y, float scale, float kern, float aspect, texturecontainer *font, glzColor color, glzOrigin origin)
+	{
+		glzShaderUseBasic();
+		glzMatrix m;
+		m.LoadIdentity();
+		m.ortho(-0.5f, 0.5f, -0.5f, 0.5f, 0.0f, 1.0f);
+		m.translate(x, y, 0);
+
+		unsigned int basic_program = glzShaderReurnBasic();
+
+		glzUniformMatrix4fv(basic_program, "projMat", m);
+		glzUniform1i(basic_program, "texunit0", 0);
+		glzUniform4f(basic_program, "color", color);
+
+		glBindTexture(GL_TEXTURE_2D, font->handle);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glEnable(GL_BLEND);
+		glzDirectDrawText(text, scale, aspect, kern, origin);
+		glDisable(GL_BLEND);
+
+	}
 
 }

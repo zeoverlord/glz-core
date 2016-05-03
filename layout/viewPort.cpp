@@ -26,136 +26,139 @@
 #include "ViewPort.h"
 
 
-
-void glzViewport::resizeView(void)
+namespace GLZ
 {
-	const float	tempLeft = left;
-	const float	tempRight = right;
-	const float	tempTop = top;
-	const float	tempBottom = bottom;
-	const float	tempWidth = right - left;
-	const float	tempHeight = top - bottom;
-	const float resizedTempWidth = tempWidth * width;
-	const float resizedTempHeight = tempHeight * height;
-
-	
-	if(ReferenceOrigin == glzOrigin::TOP_LEFT)
+	void glzViewport::resizeView(void)
 	{
-		right = tempLeft + resizedTempWidth;
-		left = tempLeft;
-		top = tempTop;
-		bottom = tempTop - resizedTempHeight;	
+		const float	tempLeft = left;
+		const float	tempRight = right;
+		const float	tempTop = top;
+		const float	tempBottom = bottom;
+		const float	tempWidth = right - left;
+		const float	tempHeight = top - bottom;
+		const float resizedTempWidth = tempWidth * width;
+		const float resizedTempHeight = tempHeight * height;
+
+
+		if(ReferenceOrigin == glzOrigin::TOP_LEFT)
+		{
+			right = tempLeft + resizedTempWidth;
+			left = tempLeft;
+			top = tempTop;
+			bottom = tempTop - resizedTempHeight;
+		}
+
+		if(ReferenceOrigin == glzOrigin::TOP_RIGHT)
+		{
+			right = tempRight;
+			left = tempRight - resizedTempWidth;
+			top = tempTop;
+			bottom = tempTop - resizedTempHeight;
+		}
+
+		if(ReferenceOrigin == glzOrigin::BOTTOM_LEFT)
+		{
+			right = tempLeft + resizedTempWidth;
+			left = tempLeft;
+			top = tempBottom + resizedTempHeight;
+			bottom = tempBottom;
+		}
+
+		if(ReferenceOrigin == glzOrigin::BOTTOM_RIGHT)
+		{
+			right = tempRight;
+			left = tempRight - resizedTempWidth;
+			top = tempBottom + resizedTempHeight;
+			bottom = tempBottom;
+		}
+
+		if(ReferenceOrigin == glzOrigin::CENTERED)
+		{
+			right = ((tempRight + tempLeft)*0.5) + (resizedTempWidth*0.5f);
+			left = ((tempRight + tempLeft)*0.5) - (resizedTempWidth*0.5f);
+
+			top = ((tempTop + tempBottom)*0.5) + (resizedTempHeight*0.5f);
+			bottom = ((tempTop + tempBottom)*0.5) - (resizedTempHeight*0.5f);
+		}
+
+		if(ReferenceOrigin == glzOrigin::LEFT)
+		{
+			right = tempLeft + resizedTempWidth;
+			left = tempLeft;
+			top = ((tempTop + tempBottom)*0.5) + (resizedTempHeight*0.5f);
+			bottom = ((tempTop + tempBottom)*0.5) - (resizedTempHeight*0.5f);
+		}
+
+		if(ReferenceOrigin == glzOrigin::RIGHT)
+		{
+			right = tempRight;
+			left = tempRight - resizedTempWidth;
+			top = ((tempTop + tempBottom)*0.5) + (resizedTempHeight*0.5f);
+			bottom = ((tempTop + tempBottom)*0.5) - (resizedTempHeight*0.5f);
+		}
+
+		if(ReferenceOrigin == glzOrigin::TOP)
+		{
+			right = ((tempRight + tempLeft)*0.5) + (resizedTempWidth*0.5f);
+			left = ((tempRight + tempLeft)*0.5) - (resizedTempWidth*0.5f);
+			top = tempTop;
+			bottom = tempTop - resizedTempHeight;
+		}
+
+		if(ReferenceOrigin == glzOrigin::BOTTOM)
+		{
+			right = ((tempRight + tempLeft)*0.5) + (resizedTempWidth*0.5f);
+			left = ((tempRight + tempLeft)*0.5) - (resizedTempWidth*0.5f);
+			top = tempBottom + resizedTempHeight;
+			bottom = tempBottom;
+		}
+
+		aspect = (resizedTempWidth*displayWidth) / (resizedTempHeight*displayHeight);
 	}
 
-	if(ReferenceOrigin == glzOrigin::TOP_RIGHT)
+
+	void glzViewport::update()
 	{
-		right = tempRight ;
-		left = tempRight - resizedTempWidth;
-		top = tempTop;
-		bottom = tempTop - resizedTempHeight;
+		if(parent != nullptr)
+		{
+			copyParentView();
+			pushInPaddingParent();
+		}
+		resizeView();
 	}
 
-	if(ReferenceOrigin == glzOrigin::BOTTOM_LEFT)
+	void glzViewport::setupViewport()
 	{
-		right = tempLeft + resizedTempWidth;
-		left = tempLeft;
-		top = tempBottom + resizedTempHeight;
-		bottom = tempBottom;
+		float oAspect = (float)displayWidth / (float)displayHeight;
+
+		int newDisplayX = ((left + (oAspect*0.5)) / oAspect) * displayWidth;
+		int newDisplayY = (bottom + 0.5) * displayHeight;
+		int newDisplayWidth = (((right + (oAspect*0.5)) / oAspect) * displayWidth) - newDisplayX;
+		int newDisplayHeight = ((top + 0.5) * displayHeight) - newDisplayY;
+
+		glViewport(newDisplayX, newDisplayY, newDisplayWidth, newDisplayHeight);
+
 	}
 
-	if(ReferenceOrigin == glzOrigin::BOTTOM_RIGHT)
+	void glzViewport::disableViewport()
 	{
-		right = tempRight;
-		left = tempRight - resizedTempWidth;
-		top = tempBottom + resizedTempHeight;
-		bottom = tempBottom;
+		glViewport(0, 0, displayWidth, displayHeight);
 	}
 
-	if(ReferenceOrigin == glzOrigin::CENTERED)
-	{
-		right = ((tempRight + tempLeft)*0.5) + (resizedTempWidth*0.5f);
-		left = ((tempRight + tempLeft)*0.5) - (resizedTempWidth*0.5f);
 
-		top = ((tempTop + tempBottom)*0.5) + (resizedTempHeight*0.5f);
-		bottom = ((tempTop + tempBottom)*0.5) - (resizedTempHeight*0.5f);
+
+	glzMatrix glzViewport::returnOrthoMatrix()
+	{
+		glzMatrix m;
+
+		m.LoadIdentity();
+		m.ortho2D(-0.5f, 0.5f, -0.5f, 0.5f);
+		return m;
 	}
 
-	if (ReferenceOrigin == glzOrigin::LEFT)
+	glzSprite glzViewport::returnSprite()
 	{
-		right = tempLeft + resizedTempWidth;
-		left = tempLeft;
-		top = ((tempTop + tempBottom)*0.5) + (resizedTempHeight*0.5f);
-		bottom = ((tempTop + tempBottom)*0.5) - (resizedTempHeight*0.5f);
+		return glzSprite(tex2(left, right), tex2(bottom, top), 0.0f);
 	}
 
-	if (ReferenceOrigin == glzOrigin::RIGHT)
-	{
-		right = tempRight;
-		left = tempRight - resizedTempWidth;
-		top = ((tempTop + tempBottom)*0.5) + (resizedTempHeight*0.5f);
-		bottom = ((tempTop + tempBottom)*0.5) - (resizedTempHeight*0.5f);
-	}
-
-	if (ReferenceOrigin == glzOrigin::TOP)
-	{
-		right = ((tempRight + tempLeft)*0.5) + (resizedTempWidth*0.5f);
-		left = ((tempRight + tempLeft)*0.5) - (resizedTempWidth*0.5f);
-		top = tempTop;
-		bottom = tempTop - resizedTempHeight;
-	}
-
-	if (ReferenceOrigin == glzOrigin::BOTTOM)
-	{
-		right = ((tempRight + tempLeft)*0.5) + (resizedTempWidth*0.5f);
-		left = ((tempRight + tempLeft)*0.5) - (resizedTempWidth*0.5f);
-		top = tempBottom + resizedTempHeight;
-		bottom = tempBottom;
-	}
-
-	aspect = (resizedTempWidth*displayWidth) / (resizedTempHeight*displayHeight);
-}
-
-
-void glzViewport::update()
-{
-	if(parent != nullptr)
-	{
-		copyParentView();
-		pushInPaddingParent();
-	}	
-	resizeView();
-}
-
-void glzViewport::setupViewport()
-{
-	float oAspect = (float)displayWidth / (float)displayHeight;
-
-	int newDisplayX = ((left + (oAspect*0.5)) / oAspect) * displayWidth;
-	int newDisplayY = (bottom + 0.5) * displayHeight;	
-	int newDisplayWidth = (((right + (oAspect*0.5)) / oAspect) * displayWidth) - newDisplayX;
-	int newDisplayHeight = ((top+0.5) * displayHeight) - newDisplayY;
-
-	glViewport(newDisplayX, newDisplayY, newDisplayWidth, newDisplayHeight);
-	
-}
-
-void glzViewport::disableViewport()
-{
-	glViewport(0, 0, displayWidth, displayHeight);
-}
-
-
-
-glzMatrix glzViewport::returnOrthoMatrix()
-{
-	glzMatrix m;
-
-	m.LoadIdentity();		
-	m.ortho2D(-0.5f, 0.5f, -0.5f, 0.5f);
-	return m;
-}
-
-glzSprite glzViewport::returnSprite()
-{
-	return glzSprite(tex2(left, right), tex2(bottom, top), 0.0f);
 }

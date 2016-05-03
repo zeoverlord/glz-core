@@ -27,137 +27,141 @@
 #include <stdio.h>
 #include <vector>
 
-using namespace std;
-
-static resinit ri;
-
-
-
-
-static vector<txLoadContainer> textureloadstore;
-static vector<texturecontainer> texturestore;
-
-
-
-void glzResourcemanager::createTexture(string name, string filename, glzTexFilter filter)
-{
-	createTexture(name, filename, filter, 5);
-}
-
-
-	
-void glzResourcemanager::createTexture(string name, string filename, glzTexFilter filter, int priority)
+namespace GLZ
 {
 
-	texturecontainer tx;
-	txLoadContainer tl;
+	static resinit ri;
 
-	bool foundname=false;
 
-	for (auto& a : texturestore)
-		if (a.objectname == name) {	foundname = true;}
 
-	if (foundname==false)
-	{ 
-		tx.objectname = name;
-		tx.handle = ri.getDefaultexture();
-		//tx.handle = glzLoadTexture(filename, filter);	
-		tx.uid = ri.getNewId();
-		texturestore.push_back(tx);
+
+	static std::vector<txLoadContainer> textureloadstore;
+	static std::vector<texturecontainer> texturestore;
+
+
+
+	void glzResourcemanager::createTexture(std::string name, std::string filename, glzTexFilter filter)
+	{
+		createTexture(name, filename, filter, 5);
 	}
 
-	tl.name = name;
-	tl.filename = filename;
-	tl.filter = filter;
-	tl.priority = priority;
 
-	
-	textureloadstore.push_back(tl);
-	return;
-}
 
-	
-texturecontainer* glzResourcemanager::gettexture(string name)
-{
-	for (auto& a : texturestore)
-		if (a.objectname == name) {
-			//tcon =;
-			return &a;}
+	void glzResourcemanager::createTexture(std::string name, std::string filename, glzTexFilter filter, int priority)
+	{
 
-	texturecontainer tx;
-	tx.objectname = name;
-	tx.handle = ri.getDefaultexture();
-	tx.uid = ri.getNewId();
-	texturestore.push_back(tx);
+		texturecontainer tx;
+		txLoadContainer tl;
 
-	for (auto& a : texturestore)
-		if (a.objectname == name) {
-			//tcon =;
-			return &a;
-		}
+		bool foundname = false;
 
-	return nullptr;
+		for(auto& a : texturestore)
+			if(a.objectname == name) { foundname = true; }
 
-}
-
-unsigned int glzResourcemanager::gettextureHandle(string name)
-{
-	for (auto a : texturestore)
-		if (a.objectname == name) 
+		if(foundname == false)
 		{
-			return a.handle;
+			tx.objectname = name;
+			tx.handle = ri.getDefaultexture();
+			//tx.handle = glzLoadTexture(filename, filter);	
+			tx.uid = ri.getNewId();
+			texturestore.push_back(tx);
 		}
 
-
-	texturecontainer tx;
-	tx.objectname = name;
-	tx.handle = ri.getDefaultexture();
-	tx.uid = ri.getNewId();
-	texturestore.push_back(tx);
-
-	return tx.handle;
-
-}
+		tl.name = name;
+		tl.filename = filename;
+		tl.filter = filter;
+		tl.priority = priority;
 
 
-void glzResourcemanager::manipulate(string name)
-{
-	for (auto& a : texturestore)
-		if (a.objectname == name)
-		{
-			a.handle = ri.getDefaultexture();
-		}
-}
+		textureloadstore.push_back(tl);
+		return;
+	}
 
 
-bool glzResourcemanager::load_one(void)
-{
-	
+	texturecontainer* glzResourcemanager::gettexture(std::string name)
+	{
+		for(auto& a : texturestore)
+			if(a.objectname == name) {
+				//tcon =;
+				return &a;
+			}
 
-	if (textureloadstore.size() == 0) return false;
+		texturecontainer tx;
+		tx.objectname = name;
+		tx.handle = ri.getDefaultexture();
+		tx.uid = ri.getNewId();
+		texturestore.push_back(tx);
 
-	sort(textureloadstore.begin(), textureloadstore.end(), [](const txLoadContainer& a, const txLoadContainer& b) {	return a.priority < b.priority;	});
-	
-	auto tl = textureloadstore.front();
-	textureloadstore.erase(textureloadstore.begin());
+		for(auto& a : texturestore)
+			if(a.objectname == name) {
+				//tcon =;
+				return &a;
+			}
+
+		return nullptr;
+
+	}
+
+	unsigned int glzResourcemanager::gettextureHandle(std::string name)
+	{
+		for(auto a : texturestore)
+			if(a.objectname == name)
+			{
+				return a.handle;
+			}
 
 
-	for (auto& a : texturestore)
-		if (a.objectname == tl.name) {	
-			a.handle = glzLoadTexture(tl.filename, tl.filter);
-			return true;
-		}
+		texturecontainer tx;
+		tx.objectname = name;
+		tx.handle = ri.getDefaultexture();
+		tx.uid = ri.getNewId();
+		texturestore.push_back(tx);
 
-	return true;
-}
+		return tx.handle;
+
+	}
 
 
-void glzResourcemanager::load_all(void)
-{
+	void glzResourcemanager::manipulate(std::string name)
+	{
+		for(auto& a : texturestore)
+			if(a.objectname == name)
+			{
+				a.handle = ri.getDefaultexture();
+			}
+	}
 
-	sort(textureloadstore.begin(), textureloadstore.end(), [](const txLoadContainer& a, const txLoadContainer& b) {	return a.priority < b.priority;	});
 
-	while (load_one()){}
+	bool glzResourcemanager::load_one(void)
+	{
 
-	return;
+
+		if(textureloadstore.size() == 0) return false;
+
+		sort(textureloadstore.begin(), textureloadstore.end(), [](const txLoadContainer& a, const txLoadContainer& b) {	return a.priority < b.priority;	});
+
+		auto tl = textureloadstore.front();
+		textureloadstore.erase(textureloadstore.begin());
+
+
+		for(auto& a : texturestore)
+			if(a.objectname == tl.name) {
+				a.handle = glzLoadTexture(tl.filename, tl.filter);
+				return true;
+			}
+
+		return true;
+	}
+
+
+	void glzResourcemanager::load_all(void)
+	{
+
+		sort(textureloadstore.begin(), textureloadstore.end(), [](const txLoadContainer& a, const txLoadContainer& b) {	return a.priority < b.priority;	});
+
+		while(load_one()){}
+
+		return;
+	}
+
 }

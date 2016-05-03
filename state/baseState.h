@@ -31,50 +31,53 @@
 #include <vector>
 #include <memory>
 
-// how it works
-// at a start the viewport its inside it's parent window
-// if width is wider than what the origin coordinate allows then the window will be resized
-
-class glzBaseState
+namespace GLZ
 {
-public:
+	// how it works
+	// at a start the viewport its inside it's parent window
+	// if width is wider than what the origin coordinate allows then the window will be resized
 
-	glzViewport mView;
-	bool mMessageQuit;
-	bool mMessageFullscreen;
-
-public:
-
-	glzBaseState(){ mMessageQuit = false; mMessageFullscreen = false; }
-	~glzBaseState(){ Deinitialize(); }
-	virtual bool Initialize(int width, int height);
-	virtual void Deinitialize(void);
-	virtual void Update(float seconds);
-	virtual void DisplayUpdate(int width, int height);
-	virtual void Draw(void);
-
-	// these should only be temporary 
-	bool pollMessageQuit()
+	class glzBaseState
 	{
-		if(!mMessageQuit) 
-			return false;
-		else
-		{
-			mMessageQuit = false;
-			return true;
-		}
-	}
+	public:
 
-	bool pollMessageFullscreen()
-	{
-		if(!mMessageFullscreen)
-			return false;
-		else
-		{
-			mMessageFullscreen = false;
-			return true;
-		}
-	}
-	
+		glzViewport mView;
+		bool mMessageQuit;
+		bool mMessageFullscreen;
 
-};
+	public:
+
+		glzBaseState(){ mMessageQuit = false; mMessageFullscreen = false; }
+		~glzBaseState(){ Deinitialize(); }
+		virtual bool Initialize(int width, int height);
+		virtual void Deinitialize(void);
+		virtual void Update(float seconds);
+		virtual void DisplayUpdate(int width, int height);
+		virtual void Draw(void);
+
+		// these should only be temporary 
+		bool pollMessageQuit()
+		{
+			if(!mMessageQuit)
+				return false;
+			else
+			{
+				mMessageQuit = false;
+				return true;
+			}
+		}
+
+		bool pollMessageFullscreen()
+		{
+			if(!mMessageFullscreen)
+				return false;
+			else
+			{
+				mMessageFullscreen = false;
+				return true;
+			}
+		}
+
+
+	};
+}

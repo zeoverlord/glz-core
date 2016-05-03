@@ -29,37 +29,40 @@
 #include <gl\glu.h>												// Header File For The GLu32 Library
 #include <gl\glext.h>
 
+namespace GLZ
+{
 
-enum class glzTileType { DOUBLE_LAYER, QUAD_LAYER };
+	enum class glzTileType { DOUBLE_LAYER, QUAD_LAYER };
 
-class glztiles{
-public:
-	
-	int width;
-	int height;
-	glzTileType type;
-	img_head imghdr;
-	unsigned char *data;
-	unsigned int tex;
-	string img_filename;
-	bool tex_changed;
-	bool data_changed;
-	
-	void load(string const filename, glzTileType intype);
+	class glztiles{
+	public:
 
-	void update_texture(void);
-	void save(void);
+		int width;
+		int height;
+		glzTileType type;
+		img_head imghdr;
+		unsigned char *data;
+		unsigned int tex;
+		std::string img_filename;
+		bool tex_changed;
+		bool data_changed;
 
-	// helper functions to read an write data
-	char get_pixel(int x, int y, int layer);
-	void put_pixel(int x, int y, int layer, char value);
+		void load(std::string const filename, glzTileType intype);
+
+		void update_texture(void);
+		void save(void);
+
+		// helper functions to read an write data
+		char get_pixel(int x, int y, int layer);
+		void put_pixel(int x, int y, int layer, char value);
 
 
-	void paint_pixel(int x, int y, int px, int py, bool animate, bool flip, int layer);
-	void put_extra_bit(int x, int y, bool bitdata, int layer);
+		void paint_pixel(int x, int y, int px, int py, bool animate, bool flip, int layer);
+		void put_extra_bit(int x, int y, bool bitdata, int layer);
 
-	bool getTilecolision(float x, float y, int layer, bool flip_y);
+		bool getTilecolision(float x, float y, int layer, bool flip_y);
 
-	~glztiles();
+		~glztiles();
 
-};
+	};
+}

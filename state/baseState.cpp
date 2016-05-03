@@ -28,57 +28,58 @@
 #include "..\input\input.h"
 
 
-
-
-
-
-
-bool glzBaseState::Initialize(int width, int height)					// Any GL Init Code & User Initialiazation Goes Here
+namespace GLZ
 {
-	GetFocus();
-	GetAsyncKeyState(WM_KEYUP);	
-
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);						// Black Background
-	glClearDepth(1.0f);										// Depth Buffer Setup
-	glDepthFunc(GL_LEQUAL);									// The Type Of Depth Testing (Less Or Equal)
-	glEnable(GL_DEPTH_TEST);									// Enable Depth Testing
-	glShadeModel(GL_SMOOTH);									// Select Smooth Shading
-	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);			// Set Perspective Calculations To Most Accurate
-
-	return TRUE;												// Return TRUE (Initialization Successful)
-}
 
 
-void glzBaseState::Deinitialize(void)										// Any User DeInitialization Goes Here
-{
-}
-
-void glzBaseState::Update(float seconds)								// Perform Motion Updates Here
-{
-	glzInput input;
-
-	if(input.getKeyState(VK_ESCAPE) == TRUE)					// Is ESC Being Pressed?
+	bool glzBaseState::Initialize(int width, int height)					// Any GL Init Code & User Initialiazation Goes Here
 	{
-		mMessageQuit = true;						// Terminate The Program
-	}
+		GetFocus();
+		GetAsyncKeyState(WM_KEYUP);
 
-	if(input.getKeyState(VK_F1) == TRUE)						// Is F1 Being Pressed?
-	{
-		mMessageFullscreen = true;							// Toggle Fullscreen Mode
+		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);						// Black Background
+		glClearDepth(1.0f);										// Depth Buffer Setup
+		glDepthFunc(GL_LEQUAL);									// The Type Of Depth Testing (Less Or Equal)
+		glEnable(GL_DEPTH_TEST);									// Enable Depth Testing
+		glShadeModel(GL_SMOOTH);									// Select Smooth Shading
+		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);			// Set Perspective Calculations To Most Accurate
+
+		return TRUE;												// Return TRUE (Initialization Successful)
 	}
 
 
-}
+	void glzBaseState::Deinitialize(void)										// Any User DeInitialization Goes Here
+	{
+	}
 
-void glzBaseState::DisplayUpdate(int width, int height)
-{
-	mView.setDisplay(0,0,width,height);
-}
+	void glzBaseState::Update(float seconds)								// Perform Motion Updates Here
+	{
+		glzInput input;
 
-void glzBaseState::Draw(void)
-{
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);		// Clear Screen And Depth Buffer
+		if(input.getKeyState(VK_ESCAPE) == TRUE)					// Is ESC Being Pressed?
+		{
+			mMessageQuit = true;						// Terminate The Program
+		}
+
+		if(input.getKeyState(VK_F1) == TRUE)						// Is F1 Being Pressed?
+		{
+			mMessageFullscreen = true;							// Toggle Fullscreen Mode
+		}
 
 
-	glFlush();													// Flush The GL Rendering Pipeline
+	}
+
+	void glzBaseState::DisplayUpdate(int width, int height)
+	{
+		mView.setDisplay(0, 0, width, height);
+	}
+
+	void glzBaseState::Draw(void)
+	{
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);		// Clear Screen And Depth Buffer
+
+
+		glFlush();													// Flush The GL Rendering Pipeline
+	}
+
 }

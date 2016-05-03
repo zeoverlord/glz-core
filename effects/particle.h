@@ -25,77 +25,79 @@
 #include "..\utilities\vectormath.h"
 
 
-using namespace std;
+namespace GLZ
+{
 
-typedef struct{
-	vert3 pos;
-	vec3 dir;  // motion vector in units per second
-	tex2 tx;
-	float age;  // how old this particle is, affects the u texture coordinate
-	float maxage; //when to die
-	float drag; // how much it's effected by drag
-	float gravity;
-	float weight;
-	bool active;
-}glzSimpleParticle;
+	typedef struct{
+		vert3 pos;
+		vec3 dir;  // motion vector in units per second
+		tex2 tx;
+		float age;  // how old this particle is, affects the u texture coordinate
+		float maxage; //when to die
+		float drag; // how much it's effected by drag
+		float gravity;
+		float weight;
+		bool active;
+	}glzSimpleParticle;
 
-class glzSimpleParticleSystem{
-private: 
-	
-	float time;
-	float scale;
-	bool running;
-	unsigned int pc;
-	bool clampx, clampy, clampz;
-	vector<glzSimpleParticle> p;
+	class glzSimpleParticleSystem{
+	private:
 
-public:
-	glzSimpleParticleSystem();
-	void set_time(float t) { time = t; }
-	void set_environment(float scale_in);
-	void set_clamp(bool clampx_in, bool clampy_in, bool clampz_in);
+		float time;
+		float scale;
+		bool running;
+		unsigned int pc;
+		bool clampx, clampy, clampz;
+		std::vector<glzSimpleParticle> p;
 
-	// spawners
-	void spawn_burst(unsigned int num, vert3 pos_in, float v_in, float mag, float maxage_in, float agediff, float drag_in, float dragdiff, float gravity, float weightin);
+	public:
+		glzSimpleParticleSystem();
+		void set_time(float t) { time = t; }
+		void set_environment(float scale_in);
+		void set_clamp(bool clampx_in, bool clampy_in, bool clampz_in);
 
-	void spawn_line_burst(unsigned int num, vert3 pos_in, float width, float v_in, float mag, float maxage_in, float agediff, float drag_in, float dragdiff, float gravity, float weightin);
+		// spawners
+		void spawn_burst(unsigned int num, vert3 pos_in, float v_in, float mag, float maxage_in, float agediff, float drag_in, float dragdiff, float gravity, float weightin);
 
-	// aditional effects
+		void spawn_line_burst(unsigned int num, vert3 pos_in, float width, float v_in, float mag, float maxage_in, float agediff, float drag_in, float dragdiff, float gravity, float weightin);
 
-	void collide_plane(vec3 normal, vert3 pl);
-	void collide_plane_y(float y, bool up);
+		// aditional effects
 
-	void singularity(vert3 p, float range, float strength);
-	
-	void noise(float magnitude);
-	void drag(float magnitude);
-	void terminal_velocity(float magnitude);
-	void gravity(vec3 gv);
+		void collide_plane(vec3 normal, vert3 pl);
+		void collide_plane_y(float y, bool up);
 
+		void singularity(vert3 p, float range, float strength);
 
-
-	// final steps
-
-	bool tick();
-	void render_out();
-
-	
-};
+		void noise(float magnitude);
+		void drag(float magnitude);
+		void terminal_velocity(float magnitude);
+		void gravity(vec3 gv);
 
 
 
-typedef struct{
-	node3 p;
-	tex2 t,tscale;
-	glzPrimitive shape;  // how old this particle is, affects the u texture coordinate
-	float maxage; //when to die
-	float drag; // how much it's effected by drag
-	float gravity;
-	float noise;
-	bool active;
-	bool isRidgid; // is this particle affected by physics
-	bool selfColide; // does this particle colide with other particles
-	bool selfGravity;
-	float attract, repulse; // repulstion is a power of two from attraction
+		// final steps
 
-}glzMediumParticle;
+		bool tick();
+		void render_out();
+
+
+	};
+
+
+
+	typedef struct{
+		node3 p;
+		tex2 t, tscale;
+		glzPrimitive shape;  // how old this particle is, affects the u texture coordinate
+		float maxage; //when to die
+		float drag; // how much it's effected by drag
+		float gravity;
+		float noise;
+		bool active;
+		bool isRidgid; // is this particle affected by physics
+		bool selfColide; // does this particle colide with other particles
+		bool selfGravity;
+		float attract, repulse; // repulstion is a power of two from attraction
+
+	}glzMediumParticle;
+}

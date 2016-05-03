@@ -24,29 +24,31 @@
 
 #include "type.h"
 #include "vectormath.h"
-using namespace std;
-
-class glzFrameBuffer{ // framebuffer object class
-
-private:
-	bool hasColorTexture, hasDepthTexture;
-	GLuint frameBufferHandle, ColorBufferHandle, DepthBufferHandle;
-
-public:
+namespace GLZ
+{
 
 
-	glzFrameBuffer() {}
-	~glzFrameBuffer() {}
+	class glzFrameBuffer{ // framebuffer object class
 
-	void init(int width, int height, bool hasColorTexture = true, bool hasDepthTexture = false);	
-	void startRendering();
-	void stopRendering();
-	void bindColorBuffer();
-	void bindDepthBuffer();
+	private:
+		bool hasColorTexture, hasDepthTexture;
+		GLuint frameBufferHandle, ColorBufferHandle, DepthBufferHandle;
 
-	unsigned int getColorBufferHandle();
-	unsigned int getDepthBufferHandle();
+	public:
 
 
-};
+		glzFrameBuffer() {}
+		~glzFrameBuffer() {}
 
+		void init(int width, int height, bool hasColorTexture = true, bool hasDepthTexture = false);
+		void startRendering();
+		void stopRendering();
+		void bindColorBuffer();
+		void bindDepthBuffer();
+
+		unsigned int getColorBufferHandle();
+		unsigned int getDepthBufferHandle();
+
+
+	};
+}

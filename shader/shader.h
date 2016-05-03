@@ -25,46 +25,49 @@
 #include "..\utilities\vectormath.h"
 #include "..\utilities\color.h"
 
-		//type signifies the type of data to choose from, if set at GLZ_AUTO it chooses the default settings
+namespace GLZ
+{
+	//type signifies the type of data to choose from, if set at GLZ_AUTO it chooses the default settings
 
-enum class glzShadertype{ VERTEX_SHADER,FRAGMENT_SHADER, GEOMETRY_SHADER };
+	enum class glzShadertype{ VERTEX_SHADER, FRAGMENT_SHADER, GEOMETRY_SHADER };
 
-unsigned int glzShaderLoad(string const file_vert, string const file_geo, string const file_frag, glzVAOType type);
-unsigned int glzShaderLoad(string const file_vert, string const file_frag, glzVAOType type);
-unsigned int glzShaderLoadString(string const vert, string const frag, glzVAOType type);
-void glzShaderLink(unsigned int program);
+	unsigned int glzShaderLoad(std::string const file_vert, std::string const file_geo, std::string const file_frag, glzVAOType type);
+	unsigned int glzShaderLoad(std::string const file_vert, std::string const file_frag, glzVAOType type);
+	unsigned int glzShaderLoadString(std::string const vert, std::string const frag, glzVAOType type);
+	void glzShaderLink(unsigned int program);
 
-void glzShaderProgramPush();
-void glzShaderProgramPop();
+	void glzShaderProgramPush();
+	void glzShaderProgramPop();
 
-// fixed shaders
-void glzShaderUsePasstrough(void);
-void glzShaderUseBasic(void);
-void glzShaderUseColorTint(void);
-void glzShaderUseTilemap(void);
-void glzShaderUseTiledSprite(void);
-
-
-
-unsigned int glzShaderReurnPasstrough(void);
-unsigned int glzShaderReurnBasic(void);
-unsigned int glzShaderReurnColorTint(void);
-unsigned int glzShaderReurnTilemap(void);
-unsigned int glzShaderReurnTiledSprite(void);
+	// fixed shaders
+	void glzShaderUsePasstrough(void);
+	void glzShaderUseBasic(void);
+	void glzShaderUseColorTint(void);
+	void glzShaderUseTilemap(void);
+	void glzShaderUseTiledSprite(void);
 
 
-//uniform
 
-void glzUniform1i(unsigned int ProgramObject, const string name, int v);
-void glzUniform1f(unsigned int ProgramObject, const string name, float v);
-void glzUniform2f(unsigned int ProgramObject, const string name, float v1, float v2);
-void glzUniform4f(unsigned int ProgramObject, const string name, float v1, float v2, float v3, float v4);
-void glzUniform4f(unsigned int ProgramObject, const string name, glzColor color);
+	unsigned int glzShaderReurnPasstrough(void);
+	unsigned int glzShaderReurnBasic(void);
+	unsigned int glzShaderReurnColorTint(void);
+	unsigned int glzShaderReurnTilemap(void);
+	unsigned int glzShaderReurnTiledSprite(void);
 
-void glzUniformMatrix4fv(unsigned int ProgramObject, const string name, float v[16]);
-void glzUniformMatrix4fv(unsigned int ProgramObject, const string name, double a[16]);
-void glzUniformMatrix4fv(unsigned int ProgramObject, const string name, glzMatrix m);
 
+	//uniform
+
+	void glzUniform1i(unsigned int ProgramObject, const std::string name, int v);
+	void glzUniform1f(unsigned int ProgramObject, const std::string name, float v);
+	void glzUniform2f(unsigned int ProgramObject, const std::string name, float v1, float v2);
+	void glzUniform4f(unsigned int ProgramObject, const std::string name, float v1, float v2, float v3, float v4);
+	void glzUniform4f(unsigned int ProgramObject, const std::string name, glzColor color);
+
+	void glzUniformMatrix4fv(unsigned int ProgramObject, const std::string name, float v[16]);
+	void glzUniformMatrix4fv(unsigned int ProgramObject, const std::string name, double a[16]);
+	void glzUniformMatrix4fv(unsigned int ProgramObject, const std::string name, glzMatrix m);
+
+}
 // make sure this replaces all uses of the openGL set uniform functions
 //void glzSetuniform(int type, int location, GLsizei count, GLboolean transpose, const GLfloat *value)
 

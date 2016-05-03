@@ -23,43 +23,44 @@
 
 #include "..\utilities\type.h"
 
-
-typedef struct
+namespace GLZ
+{
+	typedef struct
 	{
-	unsigned int m_width;
-	unsigned int m_height;
-	unsigned int m_bpp;
-	unsigned int m_id;
-	unsigned int m_type;
-	long imageSize;
-	glzOrigin origin;
+		unsigned int m_width;
+		unsigned int m_height;
+		unsigned int m_bpp;
+		unsigned int m_id;
+		unsigned int m_type;
+		long imageSize;
+		glzOrigin origin;
 	} img_head;
 
 
-//type signifies the type of data to choose from, if set at GLZ_AUTO it chooses the default settings
+	//type signifies the type of data to choose from, if set at GLZ_AUTO it chooses the default settings
 
 
 
-//loading
+	//loading
 
-unsigned int glzGetDefaultTextturehandle(void);
+	unsigned int glzGetDefaultTextturehandle(void);
 
-// segmented loading, for if you want to load a texture into the cpu
-void glzReadTgaHead(img_head *img,string filename);
-void glzLoadTga(img_head *img, string filename, unsigned char *data);
-void glzMaketex(img_head *img, unsigned char data[], glzTexFilter filter);
+	// segmented loading, for if you want to load a texture into the cpu
+	void glzReadTgaHead(img_head *img, std::string filename);
+	void glzLoadTga(img_head *img, std::string filename, unsigned char *data);
+	void glzMaketex(img_head *img, unsigned char data[], glzTexFilter filter);
 
-unsigned int glzLoadTexture(string filename, glzTexFilter filter);  // type is here which image type (same as in openGL) and filter is the texture filtering
-// this load function only loads either TGA files or whtever the file ending is, but that's for another version
-
-
-// saving
+	unsigned int glzLoadTexture(std::string filename, glzTexFilter filter);  // type is here which image type (same as in openGL) and filter is the texture filtering
+	// this load function only loads either TGA files or whtever the file ending is, but that's for another version
 
 
-void glzScreenShot(string filename, int x, int y, glzTexCompression type);  // auto saves a compressed file
-void glzScreenShotADV(string filename, int xoffset, int yoffset, int x, int y, glzTexCompression type);
-void glzSaveTGA(string filename, int x, int y, glzTexCompression type, unsigned int tex_type, unsigned char *in_data);
+	// saving
 
+
+	void glzScreenShot(std::string filename, int x, int y, glzTexCompression type);  // auto saves a compressed file
+	void glzScreenShotADV(std::string filename, int xoffset, int yoffset, int x, int y, glzTexCompression type);
+	void glzSaveTGA(std::string filename, int x, int y, glzTexCompression type, unsigned int tex_type, unsigned char *in_data);
+}
 
 /*
 // future stuff

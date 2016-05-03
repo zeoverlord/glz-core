@@ -24,68 +24,70 @@
 
 #include "..\utilities\type.h"
 
+namespace GLZ
+{
+	class glzInputData{
 
-class glzInputData{
-	
-public:		
-	bool keyDown[256];								// Holds TRUE / FALSE For Each Key
-	bool LMdown;
-	bool MMdown;
-	bool RMdown;
-	int Mpos_x;
-	int Mpos_y;
-	int Mweel;
-	bool Mactive;
-	bool pulsar1;
-	bool pulsar2;
-	bool pulsar4;
-	bool pulsar8;
-	bool pulsar16;
-	float pulsartimer;
-	int pulsarcounter;
+	public:
+		bool keyDown[256];								// Holds TRUE / FALSE For Each Key
+		bool LMdown;
+		bool MMdown;
+		bool RMdown;
+		int Mpos_x;
+		int Mpos_y;
+		int Mweel;
+		bool Mactive;
+		bool pulsar1;
+		bool pulsar2;
+		bool pulsar4;
+		bool pulsar8;
+		bool pulsar16;
+		float pulsartimer;
+		int pulsarcounter;
 
-	glzInputData();
-};
-
-
-
-class glzInput{
-
-public:
-	glzInput(); // grab the global data on construction
-	~glzInput(); // should return data into the global
+		glzInputData();
+	};
 
 
-	void updateKeys(float inSeconds);
 
-	// pulsars - these just pulse for one frame every now and then
-	bool getPulsar1(void);
-	bool getPulsar2(void);
-	bool getPulsar4(void);
-	bool getPulsar8(void);
-	bool getPulsar16(void);
+	class glzInput{
+
+	public:
+		glzInput(); // grab the global data on construction
+		~glzInput(); // should return data into the global
 
 
-	// keys
-	void addKeyEvent(int key, bool keydown);
-	bool getKeyState(int key);
+		void updateKeys(float inSeconds);
 
-	//mouse
-	void SetMouseL(bool keydown);
-	void SetMouseM(bool keydown);
-	void SetMouseR(bool keydown);
+		// pulsars - these just pulse for one frame every now and then
+		bool getPulsar1(void);
+		bool getPulsar2(void);
+		bool getPulsar4(void);
+		bool getPulsar8(void);
+		bool getPulsar16(void);
 
-	bool getMouseL(void);
-	bool getMouseM(void);
-	bool getMouseR(void);
 
-	void setMouseX(int x);
-	void setMouseY(int y);
-	int getMouseX(void);
-	int getMouseY(void);
+		// keys
+		void addKeyEvent(int key, bool keydown);
+		bool getKeyState(int key);
 
-	void setMouseWeel(int m);
-	void addMouseWeel(int m);
-	int getMouseWeel(void);
+		//mouse
+		void SetMouseL(bool keydown);
+		void SetMouseM(bool keydown);
+		void SetMouseR(bool keydown);
 
-};
+		bool getMouseL(void);
+		bool getMouseM(void);
+		bool getMouseR(void);
+
+		void setMouseX(int x);
+		void setMouseY(int y);
+		int getMouseX(void);
+		int getMouseY(void);
+
+		void setMouseWeel(int m);
+		void addMouseWeel(int m);
+		int getMouseWeel(void);
+
+	};
+}

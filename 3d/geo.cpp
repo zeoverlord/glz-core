@@ -33,7 +33,8 @@
 
 #include <vector>
 
-using namespace std;
+namespace GLZ
+{
 
 static PFNGLGENBUFFERSPROC					glGenBuffers;					// VBO Name Generation Procedure
 static PFNGLBINDBUFFERPROC					glBindBuffer;					// VBO Bind Procedure
@@ -57,7 +58,7 @@ static PFNGLISBUFFERARBPROC			glIsBuffer;
 
 
 static bool isinited_geo;
-static vector<vaostatus> active_vao;
+static std::vector<vaostatus> active_vao;
 
 // most of the functions below are booring stuff and will not be commented on as they are pretty mic self explanatory
 // it's mostly just setting up primitives, generating geometry and setting up structures
@@ -211,7 +212,7 @@ long glzPrimCubeverts(float *v, float *t, float *n)
 }
 
 
-void glzPrimCubeVector(vector<poly3> *pdata, int group, unsigned int sides)
+void glzPrimCubeVector(std::vector<poly3> *pdata, int group, unsigned int sides)
 {
 
 	// a sides of 63 should give all sides
@@ -367,6 +368,7 @@ glzVAOType getTypeFromVaoList(unsigned int vao)
 	for(auto a : active_vao)
 		if(a.vao == vao)
 			return a.type;
+	return glzVAOType::NONE;
 }
 
 
@@ -601,7 +603,7 @@ void glzIGT(float *vert, image_geo_transform igt, long num)
 	return;
 }
 
-void glzIGT(vector<poly3> *pdata, int group, image_geo_transform igt)
+void glzIGT(std::vector<poly3> *pdata, int group, image_geo_transform igt)
 {
 	int step = igt.bpp;
 	float x = 0, y = 0, z = 0;
@@ -727,7 +729,7 @@ void glzVert2TexcoordRescale(float *vert, float *tex, texture_transform tt, long
 }
 
 
-void glzVert2TexcoordRescale(vector<poly3> *pdata, int group, texture_transform tt)
+void glzVert2TexcoordRescale(std::vector<poly3> *pdata, int group, texture_transform tt)
 {
 	int i2 = 0;
 
@@ -844,7 +846,7 @@ return;
 
 
 
-void glzVAOMakeFromVector(vector<poly3> pdata, unsigned int *vao, glzVAOType type)
+void glzVAOMakeFromVector(std::vector<poly3> pdata, unsigned int *vao, glzVAOType type)
 {
 	if (!isinited_geo) ini_geo();
 
@@ -913,7 +915,7 @@ void glzVAOMakeFromVector(vector<poly3> pdata, unsigned int *vao, glzVAOType typ
 }
 
 
-void glzVAOMakeFromVector(vector<point3> pdata, unsigned int *vao, glzVAOType type)
+void glzVAOMakeFromVector(std::vector<point3> pdata, unsigned int *vao, glzVAOType type)
 {
 	if (!isinited_geo) ini_geo();
 
@@ -983,7 +985,7 @@ void glzVAOMakeFromVector(vector<point3> pdata, unsigned int *vao, glzVAOType ty
 
 
 
-long glzConvertVectorToArray(float *v, float *t, float *n, vector<poly3> pdata)
+long glzConvertVectorToArray(float *v, float *t, float *n, std::vector<poly3> pdata)
 {
 
 	int i = 0;
@@ -1033,7 +1035,7 @@ long glzConvertVectorToArray(float *v, float *t, float *n, vector<poly3> pdata)
 
 
 
-long glzConvertVectorToArray(float *v, float *t, float *n, vector<point3> pdata)
+long glzConvertVectorToArray(float *v, float *t, float *n, std::vector<point3> pdata)
 {
 
 	int i = 0;
@@ -1077,7 +1079,7 @@ void glzDirectPointArrayRender(float v[], float t[], int E)
 	return;
 }
 
-void glzDirectPointVectorRender(vector<point3> pdata)
+void glzDirectPointVectorRender(std::vector<point3> pdata)
 {
 
 	unsigned int localVAO;
@@ -1188,6 +1190,8 @@ void glzDrawVAO(long offset, long enteties, unsigned int vao, unsigned int type)
 	glDrawArrays(type, offset, enteties);
 	glBindVertexArray(0);
 	return;
+}
+
 }
 
 

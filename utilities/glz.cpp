@@ -30,8 +30,9 @@
 #include <gl/gl.h>														// Header File For The OpenGL32 Library
 #include <gl/glu.h>														// Header File For The GLu32 Library
 #include <gl/glext.h>
-using namespace std;
 
+namespace GLZ
+{
 
 static bool isinited_glz;
 static std::mt19937 mt(1729);
@@ -1208,7 +1209,7 @@ void glzAtlasUVarrayRemap(unsigned int atlas, unsigned int num, unsigned int aw,
 
 }
 
-void glzAtlasUVarrayRemap(unsigned int atlas, unsigned int aw, unsigned int ah, glzOrigin origin, vector<poly3> *p, int group)
+void glzAtlasUVarrayRemap(unsigned int atlas, unsigned int aw, unsigned int ah, glzOrigin origin, std::vector<poly3> *p, int group)
 {
 	float quv[8];
 
@@ -1240,7 +1241,7 @@ void glzAtlasUVarrayRemap(unsigned int atlas, unsigned int aw, unsigned int ah, 
 	return;
 }
 
-void glzAtlasUVarrayRemap(unsigned int atlas, unsigned int aw, unsigned int ah, glzOrigin origin, vector<poly3> *p, int group, int side)
+void glzAtlasUVarrayRemap(unsigned int atlas, unsigned int aw, unsigned int ah, glzOrigin origin, std::vector<poly3> *p, int group, int side)
 {
 	// i use this to make normally mapped objects into atlas mapped objects
 	float quv[8];
@@ -1336,7 +1337,7 @@ void glzAtlasUVarrayRemapRotate(unsigned int r, unsigned int atlas, unsigned int
 
 
 
-void glzAtlasUVarrayRemapRotate(unsigned int r, unsigned int atlas, unsigned int aw, unsigned int ah, glzOrigin origin, vector<poly3> *p, int group, int side)
+void glzAtlasUVarrayRemapRotate(unsigned int r, unsigned int atlas, unsigned int aw, unsigned int ah, glzOrigin origin, std::vector<poly3> *p, int group, int side)
 {
 	// same as above except i now also rotate the original uv coordinates
 
@@ -1500,7 +1501,7 @@ void glzProjectVertex(poly3 *p, glzMatrix m, int group)
 
 
 
-void glzProjectVertexArray(vector<poly3> *p, float Matrix[16], int group)
+void glzProjectVertexArray(std::vector<poly3> *p, float Matrix[16], int group)
 {
 
 	float v[3];
@@ -1543,7 +1544,7 @@ void glzProjectVertexArray(vector<poly3> *p, float Matrix[16], int group)
 }
 
 
-void glzProjectVertexArray(vector<poly3> *p, glzMatrix m, int group)
+void glzProjectVertexArray(std::vector<poly3> *p, glzMatrix m, int group)
 {
 
 	int i2 = 0;
@@ -1702,7 +1703,7 @@ return r;
 }
 
 
-float glzScanVectorArray(vector<poly3> pdata, int group, glzBoundingScan scan)
+float glzScanVectorArray(std::vector<poly3> pdata, int group, glzBoundingScan scan)
 {
 
 	float r = 0, r2 = 0, r3 = 0;
@@ -1903,7 +1904,7 @@ float glzScanVectorArray(vector<poly3> pdata, int group, glzBoundingScan scan)
 }
 
 
-void glzRecenterVectorArray(vector<poly3> *pdata, int group, glzOrigin origin)
+void glzRecenterVectorArray(std::vector<poly3> *pdata, int group, glzOrigin origin)
 {
 
 	glzMatrix m;
@@ -2409,6 +2410,5 @@ void setblendingmode(glzBlendingMode bmode)
 	glEnable(GL_BLEND);
 }
 
-
-
+}
 

@@ -32,7 +32,8 @@
 
 
 #include "primitives.h"
-using namespace std;
+namespace GLZ
+{
 
 static PFNGLISVERTEXARRAYPROC					glIsVertexArray;
 
@@ -84,7 +85,7 @@ long glzPrimFSQ(float *v, float *t, float *n)
 	return 6;
 }*/
 
-void glzPrimFSQVector(vector<poly3> *pdata, int group, int atlas)
+void glzPrimFSQVector(std::vector<poly3> *pdata, int group, int atlas)
 {
 
 	poly3 p1(point3(vert3(-1.0f, -1.0f, 1.0f), tex2(0.0f, 0.0f), vec3(0.0f, 0.0f, 1.0f)), point3(vert3(1.0f, -1.0f, 1.0f), tex2(1.0f, 0.0f), vec3(0.0f, 0.0f, 1.0f)), point3(vert3(1.0f, 1.0f, 1.0f), tex2(1.0f, 1.0f), vec3(0.0f, 0.0f, 1.0f)), group, atlas);
@@ -129,7 +130,7 @@ long glzPrimRandom(float *v, float *t, float *n, int num)
 }
 */
 
-void glzPrimRandomVector(vector<poly3> *pdata, int group, int atlas, int num)
+void glzPrimRandomVector(std::vector<poly3> *pdata, int group, int atlas, int num)
 {
 	int i = 0;
 
@@ -240,7 +241,7 @@ long glzPrimTetra(float *v, float *t, float *n)
 */
 
 
-void glzPrimTetraVector(vector<poly3> *pdata, int group, int atlas)
+void glzPrimTetraVector(std::vector<poly3> *pdata, int group, int atlas)
 {
 
 
@@ -353,7 +354,7 @@ long glzPrimFromIndexArrays(float *v, float *t, float *n, vec3 vert[], vec2 uv[]
 }
 */
 
-void glzPrimFromIndexArraysVector(vector<poly3> *pdata, int group, int atlas, vert3 vert[], tex2 uv[], vec3 norm[], long vert_face[], long uv_face[], long norm_face[], int enteries)
+void glzPrimFromIndexArraysVector(std::vector<poly3> *pdata, int group, int atlas, vert3 vert[], tex2 uv[], vec3 norm[], long vert_face[], long uv_face[], long norm_face[], int enteries)
 {
 	poly3 p;	
 
@@ -522,7 +523,7 @@ long glzPrimGrid(texture_transform tt, unsigned int x, unsigned int y, glzOrigin
 
 */
 
-void glzPrimGridVector(texture_transform tt, unsigned int x, unsigned int y, glzOrigin origin, vector<poly3> *pdata, int group)
+void glzPrimGridVector(texture_transform tt, unsigned int x, unsigned int y, glzOrigin origin, std::vector<poly3> *pdata, int group)
 {
 	float quv[8];
 	unsigned int xi = 0, yi = 0, it = 0, iv = 0, discard = 0;
@@ -624,13 +625,13 @@ void glzPrimGridVector(texture_transform tt, unsigned int x, unsigned int y, glz
 // the name glzLoafFileGeometryObj is a strong hint that i will add more formats
 
 
-void glzLoadFileGeometryObjVector(string const filename, vector<poly3> *pdata, int group, int atlas)
+void glzLoadFileGeometryObjVector(std::string const filename, std::vector<poly3> *pdata, int group, int atlas)
 {
 
-	ifstream file;
-	vector<vert3> vdata;
-	vector<tex2> tdata;
-	vector<vec3> ndata;
+	std::ifstream file;
+	std::vector<vert3> vdata;
+	std::vector<tex2> tdata;
+	std::vector<vec3> ndata;
 		
 	vdata.push_back(vert3(0.0, 0.0, 0.0));
 	tdata.push_back(tex2(0.0, 0.0));
@@ -651,7 +652,7 @@ void glzLoadFileGeometryObjVector(string const filename, vector<poly3> *pdata, i
 
 	char line[120];
 
-	file.open(filename, ios::in);
+	file.open(filename, std::ios::in);
 	if (!file) { return; }
 
 
@@ -939,7 +940,7 @@ long glzLoadFileGeometryObj(char filename[255], float *v, float *t, float *n)
 */
 
 
-long glzVAOMakeFromFile(string const filename, glzMatrix matrix, texture_transform tt, unsigned int *vao)
+long glzVAOMakeFromFile(std::string const filename, glzMatrix matrix, texture_transform tt, unsigned int *vao)
 {
 	if (!isinited_geo_generate) ini_geo_generate();
 
@@ -949,7 +950,7 @@ long glzVAOMakeFromFile(string const filename, glzMatrix matrix, texture_transfo
 
 
 
-	vector<poly3> pdata;
+	std::vector<poly3> pdata;
 
 	glzLoadFileGeometryObjVector(filename, &pdata,0,0);
 
@@ -971,7 +972,7 @@ long glzVAOMakeFromFile(string const filename, glzMatrix matrix, texture_transfo
 }
 
 // takes a finished polygon vector and makes a VAO from it
-long glzVAOMakeFromVector(vector<poly3> pdata, unsigned int *vao)
+long glzVAOMakeFromVector(std::vector<poly3> pdata, unsigned int *vao)
 {
 	if (!isinited_geo_generate) ini_geo_generate();
 
@@ -1018,7 +1019,7 @@ long glzVAOMakeHeightAtlasGrid(unsigned int x, unsigned int y, glzMatrix matrix,
 	if (glIsVertexArray((GLuint)&vao) == GL_FALSE) glzKillVAO(vaopoint);
 
 
-	vector<poly3> p;
+	std::vector<poly3> p;
 	
 	glzPrimGridVector(tt, x, y, tt.origin,&p,0);
 
@@ -1299,7 +1300,7 @@ long glzVAOMakePrimitives(int num, primitive_gen pg[], unsigned int *vao)
 
 	int i = 0;
 
-	vector<poly3> p;
+	std::vector<poly3> p;
 	
 
 	int saic = 0, sai = 0;
@@ -1443,4 +1444,6 @@ long glzVAOMakePrimitives(int num, primitive_gen pg[], unsigned int *vao)
 	glzVAOMakeFromVector(p, vao, glzVAOType::AUTO);
 
 	return p.size()*3;
+}
+
 }

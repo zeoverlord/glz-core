@@ -18,19 +18,20 @@
 
 #pragma once
 
-using namespace std;
 
 #include "..\utilities\type.h"
 #include "geo.h"
 #include "..\utilities\vectormath.h"
+namespace GLZ
+{
+	long glzVAOMakeFromFile(std::string const filename, glzMatrix matrix, texture_transform tt, unsigned int *vao);
+	long glzVAOMakeFromFileVector(std::string const filename, glzMatrix matrix, texture_transform tt, unsigned int *vao);
+	long glzVAOMakeFromVector(std::vector<poly3> pdata, unsigned int *vao);
 
-long glzVAOMakeFromFile(string const filename, glzMatrix matrix, texture_transform tt, unsigned int *vao);
-long glzVAOMakeFromFileVector(string const filename, glzMatrix matrix, texture_transform tt, unsigned int *vao);
-long glzVAOMakeFromVector(vector<poly3> pdata, unsigned int *vao);
+	long glzVAOMakeAtlasGrid(unsigned int x, unsigned int y, glzMatrix matrix, texture_transform tt, unsigned int *vao);
+	long glzVAOMakeHeightAtlasGrid(unsigned int x, unsigned int y, glzMatrix matrix, texture_transform tt, image_geo_transform igt, unsigned int *vao);
 
-long glzVAOMakeAtlasGrid(unsigned int x, unsigned int y, glzMatrix matrix, texture_transform tt, unsigned int *vao);
-long glzVAOMakeHeightAtlasGrid(unsigned int x, unsigned int y, glzMatrix matrix, texture_transform tt, image_geo_transform igt, unsigned int *vao);
-
-long glzVAOCountPrimitiveVerts(float varation, float resuloution, unsigned int primitive, texture_transform tt);
-long glzVAOMakePrimitive(primitive_gen pg, unsigned int *vao);
-long glzVAOMakePrimitives(int num, primitive_gen pg[], unsigned int *vao);
+	long glzVAOCountPrimitiveVerts(float varation, float resuloution, unsigned int primitive, texture_transform tt);
+	long glzVAOMakePrimitive(primitive_gen pg, unsigned int *vao);
+	long glzVAOMakePrimitives(int num, primitive_gen pg[], unsigned int *vao);
+}

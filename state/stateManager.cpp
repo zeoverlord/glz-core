@@ -27,139 +27,142 @@
 #include "..\app\appbase.h"
 #include "..\input\input.h"
 
-
-
-static vector<glzStateManagerData> states;
-static string CurrentStateString;
-static std::shared_ptr<glzBaseState> CurrentState;
-static glzViewport view;
-
-
-bool glzStateManager::addState(std::shared_ptr<glzBaseState> inState, string inName)
-{			
-	states.push_back(glzStateManagerData(inState, inName));
-	return true;
-}
-
-
-
-void glzStateManager::removeState(string inName)
+namespace GLZ
 {
 
-	if(states.empty())
-		return;
+	static std::vector<glzStateManagerData> states;
+	static std::string CurrentStateString;
+	static std::shared_ptr<glzBaseState> CurrentState;
+	static glzViewport view;
 
-	int i2 = 0;
 
-	auto i = states.begin();
-
-	while(i < states.end()) {
-
-		if(states[i2].mStateName == inName)
-		{
-			i = states.erase(i);			
-		}
-		else {
-			++i;
-			i2++;
-		}
-
-	}
-
-	if(CurrentStateString == inName)
+	bool glzStateManager::addState(std::shared_ptr<glzBaseState> inState, std::string inName)
 	{
-		CurrentStateString = states.back().mStateName;
-		CurrentState = states.back().mState;
+		states.push_back(glzStateManagerData(inState, inName));
+		return true;
 	}
 
 
-}
-bool glzStateManager::switchState(string inName)
-{
-	for(auto a : states)
-		if(a.mStateName == inName)
+
+	void glzStateManager::removeState(std::string inName)
+	{
+
+		if(states.empty())
+			return;
+
+		int i2 = 0;
+
+		auto i = states.begin();
+
+		while(i < states.end()) {
+
+			if(states[i2].mStateName == inName)
+			{
+				i = states.erase(i);
+			}
+			else {
+				++i;
+				i2++;
+			}
+
+		}
+
+		if(CurrentStateString == inName)
 		{
-			CurrentStateString = inName;
-			CurrentState = a.mState;
-			CurrentState->DisplayUpdate(view.getDisplayWidth(), view.getDisplayHeigth());
-			return true;
-		}			
-	return false;
-}
+			CurrentStateString = states.back().mStateName;
+			CurrentState = states.back().mState;
+		}
 
 
-bool glzStateManager::hasState()
-{
-	if(states.size() > 0)
-		return true;
-	else 
+	}
+	bool glzStateManager::switchState(std::string inName)
+	{
+		for(auto a : states)
+			if(a.mStateName == inName)
+			{
+				CurrentStateString = inName;
+				CurrentState = a.mState;
+				CurrentState->DisplayUpdate(view.getDisplayWidth(), view.getDisplayHeigth());
+				return true;
+			}
 		return false;
-}
+	}
 
-bool glzStateManager::stateExists(string inName)
-{
-	for(auto a : states)
-		if(a.mStateName == inName)
-		{		
+
+	bool glzStateManager::hasState()
+	{
+		if(states.size() > 0)
 			return true;
-		}
-	return false;
-}
+		else
+			return false;
+	}
 
-std::shared_ptr<glzBaseState> glzStateManager::getState(string inName)
-{
-	for (auto a : states)
-		if (a.mStateName == inName)
-		{
-			return a.mState;
-		}
-	return nullptr;
-}
+	bool glzStateManager::stateExists(std::string inName)
+	{
+		for(auto a : states)
+			if(a.mStateName == inName)
+			{
+				return true;
+			}
+		return false;
+	}
 
-std::shared_ptr<glzBaseState> glzStateManager::getCurrentState()
-{
-	return CurrentState;
-}
+	std::shared_ptr<glzBaseState> glzStateManager::getState(std::string inName)
+	{
+		for(auto a : states)
+			if(a.mStateName == inName)
+			{
+				return a.mState;
+			}
+		return nullptr;
+	}
+
+	std::shared_ptr<glzBaseState> glzStateManager::getCurrentState()
+	{
+		return CurrentState;
+	}
 
 
 
-bool glzStateManager::Initialize(int width, int height)
-{
-	view.setDisplay(0, 0, width, height);
-	return CurrentState->Initialize(view.getDisplayWidth(), view.getDisplayHeigth());
-}
+	bool glzStateManager::Initialize(int width, int height)
+	{
+		view.setDisplay(0, 0, width, height);
+		return CurrentState->Initialize(view.getDisplayWidth(), view.getDisplayHeigth());
+	}
 
-void glzStateManager::Deinitialize(void)
-{
-	for(auto a : states)
-		a.mState->Deinitialize();
+	void glzStateManager::Deinitialize(void)
+	{
+		for(auto a : states)
+			a.mState->Deinitialize();
 
-	CurrentStateString = "";
-	CurrentState = nullptr;
-	states.clear();
-}
+		CurrentStateString = "";
+		CurrentState = nullptr;
+		states.clear();
+	}
 
-void glzStateManager::Update(float seconds)
-{
-	CurrentState->Update(seconds);
-}
+	void glzStateManager::Update(float seconds)
+	{
+		CurrentState->Update(seconds);
+	}
 
-void glzStateManager::DisplayUpdate(int width, int height)
-{
-	view.setDisplay(0, 0, width, height);
-	CurrentState->DisplayUpdate(width, height);
-}
-void glzStateManager::Draw(void)
-{
-	CurrentState->Draw();
-}
+	void glzStateManager::DisplayUpdate(int width, int height)
+	{
+		view.setDisplay(0, 0, width, height);
+		CurrentState->DisplayUpdate(width, height);
+	}
+	void glzStateManager::Draw(void)
+	{
+		CurrentState->Draw();
+	}
 
-bool glzStateManager::pollMessageQuit()
-{
-	return CurrentState->pollMessageQuit();
-}
+	bool glzStateManager::pollMessageQuit()
+	{
+		return CurrentState->pollMessageQuit();
+	}
 
-bool glzStateManager::pollMessageFullscreen()
-{
-	return CurrentState->pollMessageFullscreen();
+	bool glzStateManager::pollMessageFullscreen()
+	{
+		return CurrentState->pollMessageFullscreen();
+	}
+
 }

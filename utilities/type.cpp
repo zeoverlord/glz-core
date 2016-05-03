@@ -20,8 +20,6 @@
 // https://github.com/zeoverlord/glz.git
 
 
-using namespace std;
-
 #include "type.h"
 #include "glz.h"
 #include "..\3d\geo.h"

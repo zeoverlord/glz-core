@@ -21,77 +21,74 @@
 
 #pragma once
 
-using namespace std;
-
 #include "..\utilities\type.h"
 #include "..\utilities\vectormath.h"
 #include <vector>
 
-
-
-
-		//type signifies the type of data to choose from, if set at GLZ_AUTO it chooses the default settings
-		//vao always returns the created VAO
-		//every function that creates a VAO returns the amount of Vertics to output
-		// every VAO funtion resets the vao to 0 to prevent problems unless otherwise specified
-
-typedef struct{
-	glzVAOType type;
-	unsigned int vao;
-}vaostatus;
-
-typedef struct
+namespace GLZ
 {
-	glzIGTType type;
-	unsigned int width;
-	unsigned int height;
-	unsigned int bpp;
-	float x_offset;
-	float y_offset;
-	float z_offset;
-	float scale;
-	float tscale;
-	glzAxis axis;
-	unsigned char *data;
-} image_geo_transform;
+	//type signifies the type of data to choose from, if set at GLZ_AUTO it chooses the default settings
+	//vao always returns the created VAO
+	//every function that creates a VAO returns the amount of Vertics to output
+	// every VAO funtion resets the vao to 0 to prevent problems unless otherwise specified
 
-typedef struct
-{
-	glzTTType type;
-	float u_scale;
-	float v_scale;
-	float u_offset;
-	float v_offset;
-	unsigned int atlas_width;
-	unsigned int atlas_height;
-	glzAxis axis;
-	unsigned int firstatlas;
-	unsigned int *atlas;
-	glzOrigin origin;
-} texture_transform;
+	typedef struct{
+		glzVAOType type;
+		unsigned int vao;
+	}vaostatus;
 
-typedef struct
-{
-	glzPrimitive type;
-	glzMatrix matrix;
-	texture_transform tt;
-	float variation_1;
-	float variation_2;
-	unsigned int resolution_x;
-	unsigned int resolution_y;
-	unsigned int resolution_z;
+	typedef struct
+	{
+		glzIGTType type;
+		unsigned int width;
+		unsigned int height;
+		unsigned int bpp;
+		float x_offset;
+		float y_offset;
+		float z_offset;
+		float scale;
+		float tscale;
+		glzAxis axis;
+		unsigned char *data;
+	} image_geo_transform;
 
-} primitive_gen;
+	typedef struct
+	{
+		glzTTType type;
+		float u_scale;
+		float v_scale;
+		float u_offset;
+		float v_offset;
+		unsigned int atlas_width;
+		unsigned int atlas_height;
+		glzAxis axis;
+		unsigned int firstatlas;
+		unsigned int *atlas;
+		glzOrigin origin;
+	} texture_transform;
+
+	typedef struct
+	{
+		glzPrimitive type;
+		glzMatrix matrix;
+		texture_transform tt;
+		float variation_1;
+		float variation_2;
+		unsigned int resolution_x;
+		unsigned int resolution_y;
+		unsigned int resolution_z;
+
+	} primitive_gen;
 
 
 
-long glzPrimCubeverts(float *v, float *t, float *n);
-void glzPrimCubeVector(vector<poly3> *pdata, int group, unsigned int sides);
+	long glzPrimCubeverts(float *v, float *t, float *n);
+	void glzPrimCubeVector(std::vector<poly3> *pdata, int group, unsigned int sides);
 
 
-image_geo_transform glzMakeIGT(glzIGTType type, unsigned int width, unsigned int height, unsigned int bpp, float x_offset, float y_offset, float z_offset, float scale, float tscale, glzAxis axis, unsigned char *data);
-	
-texture_transform glzMakeTT(glzTTType type, float u_scale, float v_scale, float u_offset, float v_offset, unsigned int atlas_width, unsigned int atlas_height, glzAxis axis, unsigned int firstatlas, unsigned int atlas[], glzOrigin origin);
+	image_geo_transform glzMakeIGT(glzIGTType type, unsigned int width, unsigned int height, unsigned int bpp, float x_offset, float y_offset, float z_offset, float scale, float tscale, glzAxis axis, unsigned char *data);
+
+	texture_transform glzMakeTT(glzTTType type, float u_scale, float v_scale, float u_offset, float v_offset, unsigned int atlas_width, unsigned int atlas_height, glzAxis axis, unsigned int firstatlas, unsigned int atlas[], glzOrigin origin);
 	texture_transform glzMakeTTDefault();
 	texture_transform glzMakeTTAtlas(unsigned int awidth, unsigned int aheight, unsigned int firstatlas, glzOrigin origin);
 	texture_transform glzMakeTTAtlasArray(unsigned int awidth, unsigned int aheight, unsigned int atlas[], glzOrigin origin);
@@ -107,25 +104,25 @@ texture_transform glzMakeTT(glzTTType type, float u_scale, float v_scale, float 
 	primitive_gen glzMakePGAtlasMatrix(glzPrimitive type, glzMatrix matrix, unsigned int awidth, unsigned int aheight, unsigned int firstatlas);
 
 	void glzIGT(float *vert, image_geo_transform igt, long num);
-	void glzIGT(vector<poly3> *pdata, int group, image_geo_transform igt);
+	void glzIGT(std::vector<poly3> *pdata, int group, image_geo_transform igt);
 	void glzVert2TexcoordRescale(float *vert, float *tex, texture_transform tt, long num);
-	void glzVert2TexcoordRescale(vector<poly3> *pdata, int group, texture_transform tt);
+	void glzVert2TexcoordRescale(std::vector<poly3> *pdata, int group, texture_transform tt);
 
 	long glzCountFromIndexArrays(long vert_face[], int enteries);
 	void glzVAOMakeFromArray(float v[], float t[], float n[], long enteties, unsigned int *vao, glzVAOType type);
-	void glzVAOMakeFromVector(vector<poly3> pdata, unsigned int *vao, glzVAOType type);
-	void glzVAOMakeFromVector(vector<point3> pdata, unsigned int *vao, glzVAOType type);
+	void glzVAOMakeFromVector(std::vector<poly3> pdata, unsigned int *vao, glzVAOType type);
+	void glzVAOMakeFromVector(std::vector<point3> pdata, unsigned int *vao, glzVAOType type);
 
-	
 
-	long glzConvertVectorToArray(float *v, float *t, float *n, vector<poly3> pdata);
-	long glzConvertVectorToArray(float *v, float *t, float *n, vector<point3> pdata);
+
+	long glzConvertVectorToArray(float *v, float *t, float *n, std::vector<poly3> pdata);
+	long glzConvertVectorToArray(float *v, float *t, float *n, std::vector<point3> pdata);
 
 
 
 
 	void glzDirectPointArrayRender(float v[], float t[], int E);
-	void glzDirectPointVectorRender(vector<point3> pdata);
+	void glzDirectPointVectorRender(std::vector<point3> pdata);
 	void glzDirectCubeRender(float X, float Y, float Z, float W, float H, float D, texture_transform tt, unsigned int atlas); // does exactly you think it does
 
 	void glzKillVAO(unsigned int inVao);
@@ -133,7 +130,7 @@ texture_transform glzMakeTT(glzTTType type, float u_scale, float v_scale, float 
 
 	void glzDrawVAO(long enteties, unsigned int vao, unsigned int type);
 	void glzDrawVAO(long offset, long enteties, unsigned int vao, unsigned int type);
-
+}
 
 
 	/* 

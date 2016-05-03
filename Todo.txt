@@ -9,8 +9,7 @@ Before 2d game project:
 		changeSound(soundId, stereo, volume, pitch)
 		changeSoundTo(soundId, stereo, volume, pitch, time) // change all sound data over time
 	More 2d layouting stuff
-		text that fits in a box
-	Move to own namespace
+		text that fits in a box	
 
 
 

@@ -19,7 +19,6 @@
 // the entire toolkit should exist in it's entirety at github
 // https://github.com/zeoverlord/glz.git
 
-using namespace std;
 
 #include "type.h"
 #include "glz.h"

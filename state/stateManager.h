@@ -32,45 +32,51 @@
 #include <vector>
 #include <memory>
 
-class glzStateManagerData
-{
-public:
-
-	glzStateManagerData(){ mState = nullptr; mStateName = ""; }
-	glzStateManagerData(std::shared_ptr<glzBaseState> inState, string inName){ mState = inState; mStateName = inName; }
-	~glzStateManagerData(){ mState = nullptr;  mStateName = ""; }
-
-	std::shared_ptr<glzBaseState> mState;
-	string mStateName;
-
-};
-
-class glzStateManager
+namespace GLZ
 {
 
-public:
 
-	glzStateManager(){}
-	~glzStateManager(){}
+	class glzStateManagerData
+	{
+	public:
 
-	bool addState(std::shared_ptr<glzBaseState> inState, string inName);
-	void removeState(string inName);
-	bool switchState(string inName);
-	bool hasState();
-	bool stateExists(string inName);
-	std::shared_ptr<glzBaseState> getState(string inName);
-	std::shared_ptr<glzBaseState> getCurrentState();
+		glzStateManagerData(){ mState = nullptr; mStateName = ""; }
+		glzStateManagerData(std::shared_ptr<glzBaseState> inState, std::string inName){ mState = inState; mStateName = inName; }
+		~glzStateManagerData(){ mState = nullptr;  mStateName = ""; }
+
+		std::shared_ptr<glzBaseState> mState;
+		std::string mStateName;
+
+	};
+
+	class glzStateManager
+	{
+
+	public:
+
+		glzStateManager(){}
+		~glzStateManager(){}
+
+		bool addState(std::shared_ptr<glzBaseState> inState, std::string inName);
+		void removeState(std::string inName);
+		bool switchState(std::string inName);
+		bool hasState();
+		bool stateExists(std::string inName);
+		std::shared_ptr<glzBaseState> getState(std::string inName);
+		std::shared_ptr<glzBaseState> getCurrentState();
 
 
-	bool Initialize(int width, int height);
-	void Deinitialize(void);
-	void Update(float seconds);
-	void DisplayUpdate(int width, int height);
-	void Draw(void);
+		bool Initialize(int width, int height);
+		void Deinitialize(void);
+		void Update(float seconds);
+		void DisplayUpdate(int width, int height);
+		void Draw(void);
 
-	// these should only be temporary 
-	bool pollMessageQuit();
-	bool pollMessageFullscreen();
-	
-		
-};
+		// these should only be temporary 
+		bool pollMessageQuit();
+		bool pollMessageFullscreen();
+
+
+	};
+
+}

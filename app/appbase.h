@@ -18,64 +18,58 @@
 // visit http://www.flashbang.se or contact me at overlord@flashbang.se
 // the entire toolkit should exist in it's entirety at github
 // https://github.com/zeoverlord/glz.git
-
+#pragma once
 
 
 #include "..\utilities\type.h"
-
-
-#ifndef __appbase__
-#define global __appbase__
-
-
-
-
-class glzAppinitializationData{
-
-public:
-
-	wchar_t WINDOW_TITLE[255];
-	char LOGFILE[255];
-	bool  DISPLAY_ERRORS;						// set to false if you want to suppress errors
-	bool  SHOW_FRAME;							// i normally dont but usefull if you want to make a more normal app
-	bool  ALLOW_MAAXIMIZE;						// adds minimize/maximize buttons again usefull for a normal app
-	bool  START_WINDOWED;						// starts in windowed mode instead of fullscreen
-	bool  ALLOW_FULLSCREENSWITCH;				// doesn't work that well when showing a frame, infact dont even bother and set SHOW_FRAME to false
-	bool  ALLOW_RESIZE;						// allows you to resice the window by dragging the borders, but only if SHOW_FRAME is true
-	bool  START_CENTERED;						// centers the window which looks good IMHO
-	unsigned int WINDOW_WIDTH;
-	unsigned int  WINDOW_HEIGHT;
-	unsigned int  FULLSCREEN_WIDTH;
-	unsigned int  FULLSCREEN_HEIGHT;
-	bool  NATIVE_FULLSCREEN;					// generally speaking this should be st to true, most often the current resolution is the higest anyway, overides the above settigns
-	unsigned int  WINDOW_X;
-	unsigned int  WINDOW_Y;
-	bool  FORCE_OPENGL_VERSION;				// if you want to force openGL to a specific openGL version, generally set this to false for release, but for development it could be good to set it to true
-	bool ENABLE_VSYNC;							// makes everything run a bit smoother, but at a constant rate, makes it impossible to get the current framerate
-
-	glzAppinitializationData();
-};
-
-
-
-class glzAppinitialization{
-
-public:
-	glzAppinitializationData data;
-
-	glzAppinitialization(); // grab the global data on construction
-
-	void push(); // grab the global data in case it changed
-	void pull(); // grab the global data in case it changed
-
-	void set_title(const wchar_t title[255]);
-	void set_logfile(const char logfile[255]);
-
-
-	~glzAppinitialization(); // should return data into the global
+namespace GLZ
+{
 	
+	class glzAppinitializationData{
 
-};
+	public:
+
+		wchar_t WINDOW_TITLE[255];
+		char LOGFILE[255];
+		bool  DISPLAY_ERRORS;						// set to false if you want to suppress errors
+		bool  SHOW_FRAME;							// i normally dont but usefull if you want to make a more normal app
+		bool  ALLOW_MAAXIMIZE;						// adds minimize/maximize buttons again usefull for a normal app
+		bool  START_WINDOWED;						// starts in windowed mode instead of fullscreen
+		bool  ALLOW_FULLSCREENSWITCH;				// doesn't work that well when showing a frame, infact dont even bother and set SHOW_FRAME to false
+		bool  ALLOW_RESIZE;						// allows you to resice the window by dragging the borders, but only if SHOW_FRAME is true
+		bool  START_CENTERED;						// centers the window which looks good IMHO
+		unsigned int WINDOW_WIDTH;
+		unsigned int  WINDOW_HEIGHT;
+		unsigned int  FULLSCREEN_WIDTH;
+		unsigned int  FULLSCREEN_HEIGHT;
+		bool  NATIVE_FULLSCREEN;					// generally speaking this should be st to true, most often the current resolution is the higest anyway, overides the above settigns
+		unsigned int  WINDOW_X;
+		unsigned int  WINDOW_Y;
+		bool  FORCE_OPENGL_VERSION;				// if you want to force openGL to a specific openGL version, generally set this to false for release, but for development it could be good to set it to true
+		bool ENABLE_VSYNC;							// makes everything run a bit smoother, but at a constant rate, makes it impossible to get the current framerate
+
+		glzAppinitializationData();
+	};
 
 
-#endif /* __appbase__ */
+
+	class glzAppinitialization{
+
+	public:
+		glzAppinitializationData data;
+
+		glzAppinitialization(); // grab the global data on construction
+
+		void push(); // grab the global data in case it changed
+		void pull(); // grab the global data in case it changed
+
+		void set_title(const wchar_t title[255]);
+		void set_logfile(const char logfile[255]);
+
+
+		~glzAppinitialization(); // should return data into the global
+
+
+	};
+	
+}

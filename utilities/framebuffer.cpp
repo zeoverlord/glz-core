@@ -19,7 +19,6 @@
 // the entire toolkit should exist in it's entirety at github
 // https://github.com/zeoverlord/glz.git
 
-using namespace std;
 
 #include <windows.h>											// Header File For Windows
 #include <gl\gl.h>												// Header File For The OpenGL32 Library
@@ -30,130 +29,134 @@ using namespace std;
 #include "vectormath.h"
 #include "framebuffer.h"
 
-
-static PFNGLBINDFRAMEBUFFERPROC              glBindFramebuffer;
-static PFNGLGENFRAMEBUFFERSPROC              glGenFramebuffers;
-static PFNGLGENRENDERBUFFERSPROC             glGenRenderbuffers;
-static PFNGLFRAMEBUFFERTEXTURE2DPROC         glFramebufferTexture2D;
-
-static PFNGLBINDRENDERBUFFERPROC              glBindRenderbuffer;
-static PFNGLRENDERBUFFERSTORAGEPROC             glRenderbufferStorage;
-static PFNGLFRAMEBUFFERRENDERBUFFERPROC         glFramebufferRenderbuffer;
-
-
-
-void glzFrameBuffer::init(int width, int height, bool inHasColorTexture, bool inHhasDepthTexture)
+namespace GLZ
 {
 
 
-	glBindFramebuffer = (PFNGLBINDFRAMEBUFFERPROC)wglGetProcAddress("glBindFramebuffer");
-	glGenFramebuffers = (PFNGLGENFRAMEBUFFERSPROC)wglGetProcAddress("glGenFramebuffers");
-	glGenRenderbuffers = (PFNGLGENRENDERBUFFERSPROC)wglGetProcAddress("glGenRenderbuffers");
-	glFramebufferTexture2D = (PFNGLFRAMEBUFFERTEXTURE2DPROC)wglGetProcAddress("glFramebufferTexture2D");
-	glBindRenderbuffer = (PFNGLBINDRENDERBUFFERPROC)wglGetProcAddress("glBindRenderbuffer");
-	glRenderbufferStorage = (PFNGLRENDERBUFFERSTORAGEPROC)wglGetProcAddress("glRenderbufferStorage");
-	glFramebufferRenderbuffer = (PFNGLFRAMEBUFFERRENDERBUFFERPROC)wglGetProcAddress("glFramebufferRenderbuffer");
+	static PFNGLBINDFRAMEBUFFERPROC              glBindFramebuffer;
+	static PFNGLGENFRAMEBUFFERSPROC              glGenFramebuffers;
+	static PFNGLGENRENDERBUFFERSPROC             glGenRenderbuffers;
+	static PFNGLFRAMEBUFFERTEXTURE2DPROC         glFramebufferTexture2D;
 
-
-	hasColorTexture = inHasColorTexture;
-	hasDepthTexture = inHhasDepthTexture;
+	static PFNGLBINDRENDERBUFFERPROC              glBindRenderbuffer;
+	static PFNGLRENDERBUFFERSTORAGEPROC             glRenderbufferStorage;
+	static PFNGLFRAMEBUFFERRENDERBUFFERPROC         glFramebufferRenderbuffer;
 
 
 
-	glGenFramebuffers(1, &frameBufferHandle);
-
-	if(hasColorTexture)
-		glGenTextures(1, &ColorBufferHandle);
-	else
-		glGenRenderbuffers(1, &ColorBufferHandle);
-
-	if(hasDepthTexture)
-		glGenTextures(1, &DepthBufferHandle);
-	else
-		glGenRenderbuffers(1, &DepthBufferHandle);
-
-
-	glBindFramebuffer(GL_FRAMEBUFFER_EXT, frameBufferHandle);
-
-
-	if(hasColorTexture)
+	void glzFrameBuffer::init(int width, int height, bool inHasColorTexture, bool inHhasDepthTexture)
 	{
-		glBindTexture(GL_TEXTURE_2D, ColorBufferHandle);
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_INT, NULL);
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, ColorBufferHandle, 0);
-	}
-	else
-	{
-		glBindRenderbuffer(GL_RENDERBUFFER, ColorBufferHandle);
-		glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, width, height);
-		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER_EXT, ColorBufferHandle);
-	}
-
-	if(hasDepthTexture)
-	{
-		glBindTexture(GL_TEXTURE_2D, DepthBufferHandle);
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, width, height, 0, GL_RGBA, GL_INT, NULL);
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, DepthBufferHandle, 0);
-	}
-	else
-	{
-		glBindRenderbuffer(GL_RENDERBUFFER, DepthBufferHandle);
-		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, width, height);
-		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, DepthBufferHandle);
-	}
 
 
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		glBindFramebuffer = (PFNGLBINDFRAMEBUFFERPROC)wglGetProcAddress("glBindFramebuffer");
+		glGenFramebuffers = (PFNGLGENFRAMEBUFFERSPROC)wglGetProcAddress("glGenFramebuffers");
+		glGenRenderbuffers = (PFNGLGENRENDERBUFFERSPROC)wglGetProcAddress("glGenRenderbuffers");
+		glFramebufferTexture2D = (PFNGLFRAMEBUFFERTEXTURE2DPROC)wglGetProcAddress("glFramebufferTexture2D");
+		glBindRenderbuffer = (PFNGLBINDRENDERBUFFERPROC)wglGetProcAddress("glBindRenderbuffer");
+		glRenderbufferStorage = (PFNGLRENDERBUFFERSTORAGEPROC)wglGetProcAddress("glRenderbufferStorage");
+		glFramebufferRenderbuffer = (PFNGLFRAMEBUFFERRENDERBUFFERPROC)wglGetProcAddress("glFramebufferRenderbuffer");
+
+
+		hasColorTexture = inHasColorTexture;
+		hasDepthTexture = inHhasDepthTexture;
+
+
+
+		glGenFramebuffers(1, &frameBufferHandle);
+
+		if(hasColorTexture)
+			glGenTextures(1, &ColorBufferHandle);
+		else
+			glGenRenderbuffers(1, &ColorBufferHandle);
+
+		if(hasDepthTexture)
+			glGenTextures(1, &DepthBufferHandle);
+		else
+			glGenRenderbuffers(1, &DepthBufferHandle);
+
+
+		glBindFramebuffer(GL_FRAMEBUFFER_EXT, frameBufferHandle);
+
+
+		if(hasColorTexture)
+		{
+			glBindTexture(GL_TEXTURE_2D, ColorBufferHandle);
+			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_INT, NULL);
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, ColorBufferHandle, 0);
+		}
+		else
+		{
+			glBindRenderbuffer(GL_RENDERBUFFER, ColorBufferHandle);
+			glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, width, height);
+			glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER_EXT, ColorBufferHandle);
+		}
+
+		if(hasDepthTexture)
+		{
+			glBindTexture(GL_TEXTURE_2D, DepthBufferHandle);
+			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, width, height, 0, GL_RGBA, GL_INT, NULL);
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, DepthBufferHandle, 0);
+		}
+		else
+		{
+			glBindRenderbuffer(GL_RENDERBUFFER, DepthBufferHandle);
+			glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, width, height);
+			glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, DepthBufferHandle);
+		}
+
+
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	}
+
+
+	void glzFrameBuffer::startRendering()
+	{
+		glBindTexture(GL_TEXTURE_2D, 0);
+		glBindFramebuffer(GL_FRAMEBUFFER_EXT, frameBufferHandle);
+	}
+
+	void glzFrameBuffer::stopRendering()
+	{
+		glBindTexture(GL_TEXTURE_2D, 0);
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	}
+
+	void glzFrameBuffer::bindColorBuffer()
+	{
+		if(hasColorTexture)
+		{
+			glBindTexture(GL_TEXTURE_2D, ColorBufferHandle);
+		}
+	}
+
+	void glzFrameBuffer::bindDepthBuffer()
+	{
+		if(hasDepthTexture)
+		{
+			glBindTexture(GL_TEXTURE_2D, DepthBufferHandle);
+		}
+	}
+
+
+	unsigned int glzFrameBuffer::getColorBufferHandle()
+	{
+		if(hasColorTexture)
+		{
+			return ColorBufferHandle;
+		}
+		return 0;
+	}
+
+	unsigned int glzFrameBuffer::getDepthBufferHandle()
+	{
+		if(hasDepthTexture)
+		{
+			return DepthBufferHandle;
+		}
+		return 0;
+	}
 
 }
-
-
-void glzFrameBuffer::startRendering()
-{
-	glBindTexture(GL_TEXTURE_2D, 0);
-	glBindFramebuffer(GL_FRAMEBUFFER_EXT, frameBufferHandle);
-}
-
-void glzFrameBuffer::stopRendering()
-{
-	glBindTexture(GL_TEXTURE_2D, 0);
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-}
-
-void glzFrameBuffer::bindColorBuffer()
-{
-	if(hasColorTexture)
-	{
-		glBindTexture(GL_TEXTURE_2D, ColorBufferHandle);
-	}
-}
-
-void glzFrameBuffer::bindDepthBuffer()
-{
-	if(hasDepthTexture)
-	{
-		glBindTexture(GL_TEXTURE_2D, DepthBufferHandle);
-	}
-}
-
-
-unsigned int glzFrameBuffer::getColorBufferHandle()
-{
-	if(hasColorTexture)
-	{
-		return ColorBufferHandle;
-	}
-	return 0;
-}
-
-unsigned int glzFrameBuffer::getDepthBufferHandle()
-{
-	if(hasDepthTexture)
-	{
-		return DepthBufferHandle;
-	}
-	return 0;
-}
-
