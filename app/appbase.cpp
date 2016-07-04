@@ -47,6 +47,9 @@ namespace GLZ
 		WINDOW_Y = 0;
 		FORCE_OPENGL_VERSION = true;				// if you want to force openGL to a specific openGL version, generally set this to false for release, but for development it could be good to set it to true
 		ENABLE_VSYNC = true;						// makes everything run a bit smoother, but at a constant rate, makes it impossible to get the current framerate
+		hWnd = 0;						// Window Handle
+		hDC = 0;						// Device Context
+		hRC = 0;						// Rendering Context
 
 	}
 

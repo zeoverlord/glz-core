@@ -20,7 +20,7 @@
 // https://github.com/zeoverlord/glz.git
 #pragma once
 
-
+#include <windows.h>	
 #include "..\utilities\type.h"
 namespace GLZ
 {
@@ -47,7 +47,9 @@ namespace GLZ
 		unsigned int  WINDOW_Y;
 		bool  FORCE_OPENGL_VERSION;				// if you want to force openGL to a specific openGL version, generally set this to false for release, but for development it could be good to set it to true
 		bool ENABLE_VSYNC;							// makes everything run a bit smoother, but at a constant rate, makes it impossible to get the current framerate
-
+		HWND hWnd;						// Window Handle
+		HDC	 hDC;						// Device Context
+		HGLRC hRC;						// Rendering Context
 		glzAppinitializationData();
 	};
 
