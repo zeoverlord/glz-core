@@ -183,9 +183,6 @@ namespace GLZ
 			tiledSprite_program_inited = true;
 
 		}
-
-
-
 	}
 
 	void glzShaderProgramPush()
@@ -210,18 +207,14 @@ namespace GLZ
 
 	}
 
-
-
-
 	unsigned long getFileLength(std::ifstream& file)
 	{
 		if(!file.good()) return 0;
 
-		//    unsigned long pos=file.tellg();
 		file.seekg(0, std::ios::end);
-		unsigned long const len = file.tellg();
+		std::streamoff len = file.tellg();
 		file.seekg(std::ios::beg);
-		return len;
+		return (unsigned long)len;
 	}
 
 
@@ -235,7 +228,9 @@ namespace GLZ
 		else if(type == glzShadertype::FRAGMENT_SHADER)	ShaderObject = glCreateShader(GL_FRAGMENT_SHADER);
 		else if(type == glzShadertype::GEOMETRY_SHADER)	ShaderObject = glCreateShader(GL_GEOMETRY_SHADER);
 		else return;
-		glShaderSource(ShaderObject, 1, (const char **)&shadercode, NULL);
+
+		const char *c_str = shadercode.c_str();
+		glShaderSource(ShaderObject, 1, &c_str, NULL);
 
 		int compiled = 0;
 		char str[4096];
@@ -306,6 +301,8 @@ namespace GLZ
 		glShaderSource(ShaderObject, 1, (const char **)&ShaderSource, NULL);
 
 		delete[] ShaderSource;
+
+//		delete[] ShaderSource;
 
 		int compiled = 0;
 		char str[4096];
@@ -574,5 +571,3 @@ namespace GLZ
 // shader script, which is basically a single file you call with all the shaders in it and how to load it.
 // tesselation shader support
 // precompiled shaders
-// in code loading, which is more or less using an array to load a shader
-// default shaders, much like those included in the toolkit but allready defined in the code using the above function to load them.
