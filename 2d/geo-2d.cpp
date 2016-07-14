@@ -33,6 +33,7 @@
 #include <gl/gl.h>														// Header File For The OpenGL32 Library
 #include <gl/glu.h>														// Header File For The GLu32 Library
 #include <gl/glext.h>
+#include "..\app\appbase.h"
 
 namespace GLZ
 {
@@ -501,7 +502,7 @@ namespace GLZ
 			return;
 		}
 
-
+		glzAppinitialization app;
 
 
 		unsigned int localVAO;
@@ -554,7 +555,9 @@ namespace GLZ
 
 		glzShaderUsePasstrough();
 
-		glBindSampler(0, sampler);
+		if (!app.data.legacyMode)
+			glBindSampler(0, sampler);
+
 		glBindTexture(GL_TEXTURE_2D, texture);
 
 		glzDrawVAO(0, p.size() * 3, localVAO, GL_TRIANGLES);

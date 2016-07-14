@@ -23,11 +23,13 @@
 #include <string.h>
 #include "shader.h"
 #include "shader-programs.h"
+#include "shader-programs-legacy.h"
 #include <stdio.h>
 #include <windows.h>													// Header File For The Windows Library
 #include <gl/gl.h>														// Header File For The OpenGL32 Library
 #include <gl/glu.h>														// Header File For The GLu32 Library
 #include <gl/glext.h>
+#include "..\app\appbase.h"
 
 namespace GLZ
 {
@@ -104,6 +106,7 @@ namespace GLZ
 	// now i made all of these static, so you shouldn't have to initialize them again
 	void ini_shd(void)
 	{
+		glzAppinitialization app;
 		isinited_shd = true;
 		glBindAttribLocation = (PFNGLBINDATTRIBLOCATIONPROC)wglGetProcAddress("glBindAttribLocation");
 
@@ -149,6 +152,48 @@ namespace GLZ
 		glUniformMatrix3fv = (PFNGLUNIFORMMATRIX3FVPROC)wglGetProcAddress("glUniformMatrix3fv");
 		glUniformMatrix4fv = (PFNGLUNIFORMMATRIX4FVPROC)wglGetProcAddress("glUniformMatrix4fv");
 
+		if (app.data.legacyMode)
+		{
+			
+			if (!passtrough_program_inited) {
+				passtrough_program = glzShaderLoadString(passtrough_vertex_legacy, passtrough_fragment_legacy, glzVAOType::AUTO);
+				glzShaderLink(passtrough_program);
+				passtrough_program_inited = true;
+			}
+
+			if (!basic_program_inited) {
+				basic_program = glzShaderLoadString(basic_vertex_legacy, basic_fragment_legacy, glzVAOType::AUTO);
+				glzShaderLink(basic_program);
+				basic_program_inited = true;
+
+			}
+
+			if (!colortint_program_inited) {
+				colortint_program = glzShaderLoadString(colortint_vertex_legacy, colortint_fragment_legacy, glzVAOType::AUTO);
+				glzShaderLink(colortint_program);
+				basic_program_inited = true;
+
+			}
+			
+			if (!tilemap_program_inited) {
+				tilemap_program = glzShaderLoadString(tilemap_vertex_legacy, tilemap_fragment_legacy, glzVAOType::AUTO);
+				glzShaderLink(tilemap_program);
+				tilemap_program_inited = true;
+
+			}
+
+			if (!tiledSprite_program_inited) {
+				tiledSprite_program = glzShaderLoadString(tiledSprite_vertex_legacy, tiledSprite_fragment_legacy, glzVAOType::AUTO);
+				glzShaderLink(tiledSprite_program);
+				tiledSprite_program_inited = true;
+
+			}
+		}
+		else
+		{
+
+		
+
 		if(!passtrough_program_inited) {
 			passtrough_program = glzShaderLoadString(passtrough_vertex, passtrough_fragment, glzVAOType::AUTO);
 			glzShaderLink(passtrough_program);
@@ -182,6 +227,7 @@ namespace GLZ
 			glzShaderLink(tiledSprite_program);
 			tiledSprite_program_inited = true;
 
+		}
 		}
 	}
 
@@ -333,6 +379,7 @@ namespace GLZ
 
 	unsigned int glzShaderLoadString(std::string const vert, std::string const frag, glzVAOType type)
 	{
+		glzAppinitialization app;
 		if(!isinited_shd) ini_shd();
 
 		unsigned int  program;
@@ -345,12 +392,12 @@ namespace GLZ
 
 
 
-		if(type == glzVAOType::AUTO)
-		{
-			glBindAttribLocation(program, 0, "Position");
-			glBindAttribLocation(program, 1, "TexCoord");
-			glBindAttribLocation(program, 2, "Normal");
-		}
+		if (type == glzVAOType::AUTO)
+			{
+				glBindAttribLocation(program, 0, "Position");
+				glBindAttribLocation(program, 1, "TexCoord");
+				glBindAttribLocation(program, 2, "Normal");
+			}
 
 		return program;
 	}
@@ -358,6 +405,7 @@ namespace GLZ
 	// this specific function will only work if you have openGL 3.2 installed because of the geometry shader which should be any dx 10 class hardware, basically gf8xxx and above
 	unsigned int glzShaderLoad(std::string const file_vert, std::string const file_geo, std::string const file_frag, glzVAOType type)
 	{
+		glzAppinitialization app;
 		if(!isinited_shd) ini_shd();
 
 		unsigned int  program;
@@ -370,13 +418,12 @@ namespace GLZ
 		loadShaderFile(program, file_frag, glzShadertype::FRAGMENT_SHADER);
 
 
-
-		if(type == glzVAOType::AUTO)
-		{
-			glBindAttribLocation(program, 0, "Position");
-			glBindAttribLocation(program, 1, "TexCoord");
-			glBindAttribLocation(program, 2, "Normal");
-		}
+		if (type == glzVAOType::AUTO)
+			{
+				glBindAttribLocation(program, 0, "Position");
+				glBindAttribLocation(program, 1, "TexCoord");
+				glBindAttribLocation(program, 2, "Normal");
+			}
 
 		return program;
 	}
@@ -386,6 +433,7 @@ namespace GLZ
 	// one thing to note is that the program is not linked, that function is lower down
 	unsigned int glzShaderLoad(std::string const file_vert, std::string const file_frag, glzVAOType type)
 	{
+		glzAppinitialization app;
 		if(!isinited_shd) ini_shd();
 
 		unsigned int  program;
@@ -397,12 +445,12 @@ namespace GLZ
 		loadShaderFile(program, file_frag, glzShadertype::FRAGMENT_SHADER);
 
 
-		if(type == glzVAOType::AUTO)
-		{
-			glBindAttribLocation(program, 0, "Position");
-			glBindAttribLocation(program, 1, "TexCoord");
-			glBindAttribLocation(program, 2, "Normal");
-		}
+		if (type == glzVAOType::AUTO)
+			{
+				glBindAttribLocation(program, 0, "Position");
+				glBindAttribLocation(program, 1, "TexCoord");
+				glBindAttribLocation(program, 2, "Normal");
+			}
 
 		return program;
 

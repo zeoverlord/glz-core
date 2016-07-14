@@ -53,7 +53,7 @@ static PFNGLBINDATTRIBLOCATIONPROC				glBindAttribLocation;
 static PFNGLDISABLEVERTEXATTRIBARRAYPROC		glDisableVertexAttribArray;
 static PFNGLENABLEVERTEXATTRIBARRAYPROC			glEnableVertexAttribArray;
 
-static PFNGLGETVERTEXATTRIBIUIVPROC			glGetVertexAttribIuiv;
+static PFNGLGETVERTEXATTRIBIVPROC			glGetVertexAttribiv;
 static PFNGLISBUFFERARBPROC			glIsBuffer;
 
 
@@ -394,7 +394,7 @@ void ini_geo(void)
 	glDisableVertexAttribArray = (PFNGLDISABLEVERTEXATTRIBARRAYPROC)wglGetProcAddress("glDisableVertexAttribArray");
 	glEnableVertexAttribArray = (PFNGLENABLEVERTEXATTRIBARRAYPROC)wglGetProcAddress("glEnableVertexAttribArray");
 
-	glGetVertexAttribIuiv = (PFNGLGETVERTEXATTRIBIUIVPROC)wglGetProcAddress("glGetVertexAttribIuiv");
+	glGetVertexAttribiv = (PFNGLGETVERTEXATTRIBIVPROC)wglGetProcAddress("glGetVertexAttribiv");
 	glIsBuffer = (PFNGLISBUFFERARBPROC)wglGetProcAddress("glIsBuffer");
 
 	isinited_geo = true;
@@ -1133,26 +1133,27 @@ void glzKillVAO(unsigned int inVao)
 
 	glBindVertexArray(inVao);
 
+	
+
 	unsigned int vbuf;
-	glGetVertexAttribIuiv(0,GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING,&vbuf);
+	glGetVertexAttribiv(0,GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING,(GLint*)&vbuf);
 	if( glIsBuffer(vbuf)) glDeleteBuffers(1,&vbuf);
 
 	if ((type == glzVAOType::AUTO) || (type == glzVAOType::VERTEX) || (type == glzVAOType::VERTEX_TEXTURE))
 	{
-	glGetVertexAttribIuiv(1,GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING,&vbuf);
+		glGetVertexAttribiv(1, GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING, (GLint*)&vbuf);
 	if( glIsBuffer(vbuf))  glDeleteBuffers(1,&vbuf);
 	}
 
 	if ((type == glzVAOType::AUTO) || (type == glzVAOType::VERTEX) || (type == glzVAOType::VERTEX_NORMAL) || (type == glzVAOType::VERTEX_TEXTURE_NORMAL))
 	{
-	glGetVertexAttribIuiv(2,GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING,&vbuf);
+		glGetVertexAttribiv(2, GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING, (GLint*)&vbuf);
 	if( glIsBuffer(vbuf))  glDeleteBuffers(1,&vbuf);
 	}
-
+	
 
 	glDeleteVertexArrays(1, reinterpret_cast<GLuint *>(&inVao));
 	glBindVertexArray(0);
-
 	removeFromVaoList(inVao);
 	return;
 }

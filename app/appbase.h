@@ -50,6 +50,7 @@ namespace GLZ
 		HWND hWnd;						// Window Handle
 		HDC	 hDC;						// Device Context
 		HGLRC hRC;						// Rendering Context
+		bool legacyMode;
 		glzAppinitializationData();
 	};
 

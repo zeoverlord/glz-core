@@ -50,6 +50,7 @@ namespace GLZ
 		hWnd = 0;						// Window Handle
 		hDC = 0;						// Device Context
 		hRC = 0;						// Rendering Context
+		legacyMode = false;
 
 	}
 
