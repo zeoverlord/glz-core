@@ -132,7 +132,7 @@ namespace GLZ
 
 	void glzStateManager::Deinitialize(void)
 	{
-		for(auto a : states)
+		for(auto &a : states)
 			a.mState->Deinitialize();
 
 		CurrentStateString = "";

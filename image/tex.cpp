@@ -29,6 +29,7 @@
 #include <gl/gl.h>														// Header File For The OpenGL32 Library
 #include <gl/glu.h>														// Header File For The GLu32 Library
 #include <gl/glext.h>
+#include "..\app\appbase.h"
 
 namespace GLZ
 {
@@ -348,6 +349,7 @@ namespace GLZ
 	// unless you either made your own texture or changed the texture data somehow you should really let glzLoadTexture do the job
 	void glzMaketex(img_head *img, unsigned char data[], glzTexFilter filter)
 	{
+		glzAppinitialization app;
 		if(!isinited_tex) ini_tex();
 
 
@@ -361,9 +363,19 @@ namespace GLZ
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, filter_wrap);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, filter_wrap);
 
-		glTexImage2D(GL_TEXTURE_2D, 0, img->m_type, img->m_width, img->m_height, 0, img->m_type, GL_UNSIGNED_BYTE, data);
-
-		if(filter_mip) glGenerateMipmap(GL_TEXTURE_2D);
+		if (!app.data.legacyMode)
+		{
+			glTexImage2D(GL_TEXTURE_2D, 0, img->m_type, img->m_width, img->m_height, 0, img->m_type, GL_UNSIGNED_BYTE, data);
+			if (filter_mip) 
+				glGenerateMipmap(GL_TEXTURE_2D);
+		}
+		else
+		{
+			if(!filter_mip)
+				glTexImage2D(GL_TEXTURE_2D, 0, img->m_type, img->m_width, img->m_height, 0, img->m_type, GL_UNSIGNED_BYTE, data);
+			else
+				gluBuild2DMipmaps(GL_TEXTURE_2D, img->m_type, img->m_width, img->m_height, img->m_type, GL_UNSIGNED_BYTE, data);
+		}
 
 		img->m_id = texID;
 
