@@ -1163,7 +1163,7 @@ void glzKillAllVAO(void)
 {
 	if (!isinited_geo) ini_geo();
 
-	for(auto a:active_vao)
+	for(auto &a:active_vao)
 		glzKillVAO(a.vao);
 
 	active_vao.clear();
