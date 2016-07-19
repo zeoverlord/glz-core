@@ -25,6 +25,8 @@
 #include <gl\glext.h>
 #include "input.h"
 
+#pragma comment( lib, "winmm.lib" )	
+
 namespace GLZ
 {
 	glzInputData::glzInputData()
@@ -44,6 +46,12 @@ namespace GLZ
 		pulsar16 = false;
 		pulsartimer = 0.0f;
 		pulsarcounter = 0;
+		JoyPresent = false;
+
+		JOYINFOEX joyInfoEx;
+		joyInfoEx.dwSize = sizeof(joyInfoEx);
+		joyGetDevCaps(JOYSTICKID1, &joyCaps, sizeof(joyCaps));
+		JoyPresent = (joyGetPosEx(JOYSTICKID1, &joyInfoEx) == JOYERR_NOERROR);
 	}
 
 	static glzInputData inputData;
@@ -105,6 +113,16 @@ namespace GLZ
 				inputData.pulsar16 = true;
 			}
 		}
+
+		// update the joystick/gamepad
+
+		
+		if (inputData.JoyPresent)
+		{
+			inputData.joyInfoEx.dwSize = sizeof(inputData.joyInfoEx);
+			inputData.joyInfoEx.dwFlags = JOY_RETURNALL;
+			joyGetPosEx(JOYSTICKID1, &inputData.joyInfoEx);
+		}
 		return;
 	}
 
@@ -137,4 +155,26 @@ namespace GLZ
 	void glzInput::addMouseWeel(int m) { inputData.Mweel += m; }
 	int glzInput::getMouseWeel(void) { return inputData.Mweel; }
 
+	bool glzInput::getJoyButton(glzInputJoyButton inButton)
+	{
+		if (inButton == glzInputJoyButton::eNone) return false;
+		if (inputData.joyInfoEx.dwButtons & (DWORD)inButton) return true;
+		return false;
+	}
+	float glzInput::getJoyAxis(glzInputJoyAxis inAxis)
+	{
+		if(inAxis == glzInputJoyAxis::eX) return (float)(inputData.joyInfoEx.dwXpos / (inputData.joyCaps.wXmax / 2.0f) - 1.0f);
+		if(inAxis == glzInputJoyAxis::eY) return (float)(inputData.joyInfoEx.dwXpos / (inputData.joyCaps.wXmax / 2.0f) - 1.0f);
+		if(inAxis == glzInputJoyAxis::eZ) return (float)(inputData.joyInfoEx.dwXpos / (inputData.joyCaps.wXmax / 2.0f) - 1.0f);
+
+		if(inAxis == glzInputJoyAxis::eR) return (float)(inputData.joyInfoEx.dwXpos / (inputData.joyCaps.wXmax / 2.0f) - 1.0f);
+		if(inAxis == glzInputJoyAxis::eU) return (float)(inputData.joyInfoEx.dwXpos / (inputData.joyCaps.wXmax / 2.0f) - 1.0f);
+		if(inAxis == glzInputJoyAxis::eV) return (float)(inputData.joyInfoEx.dwXpos / (inputData.joyCaps.wXmax / 2.0f) - 1.0f);
+	}
+
+	float glzInput::getJoyPOV(void)
+	{
+		if(inputData.joyInfoEx.dwPOV < 0)  return -1.0f; // pov is centered
+		return inputData.joyInfoEx.dwPOV/100.0f;
+	}
 }

@@ -1200,3 +1200,4 @@ void glzDrawVAO(long offset, long enteties, unsigned int vao, unsigned int type)
 // one for generated geometry, loaded geometry and other stuff.
 // if you have some fun geometry generation to add then look at glzVAOMakeHeightAtlasGrid since it will be more or less how all of them will look like once i expand
 // the image geo transform to work on everything
+// trasition everything to using geometry objects, just push a vector of poly3 to them and activate reflow
