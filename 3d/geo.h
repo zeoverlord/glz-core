@@ -21,6 +21,10 @@
 
 #pragma once
 
+#include <windows.h>
+#include <gl/gl.h>														// Header File For The OpenGL32 Library
+#include <gl/glu.h>														// Header File For The GLu32 Library
+#include <gl/glext.h>
 #include "..\utilities\type.h"
 #include "..\utilities\vectormath.h"
 #include <vector>
@@ -35,6 +39,10 @@ namespace GLZ
 	typedef struct{
 		glzVAOType type;
 		unsigned int vao;
+		GLuint *vbVertex;
+		GLuint *vbTexture;
+		GLuint *vbNormal;
+		bool active;
 	}vaostatus;
 
 	typedef struct
@@ -126,6 +134,7 @@ namespace GLZ
 	void glzDirectCubeRender(float X, float Y, float Z, float W, float H, float D, texture_transform tt, unsigned int atlas); // does exactly you think it does
 
 	void glzKillVAO(unsigned int inVao);
+	void glzKillVAO(vaostatus inVao);
 	void glzKillAllVAO(void);
 
 	void glzDrawVAO(long enteties, unsigned int vao, unsigned int type);

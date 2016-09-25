@@ -26,6 +26,7 @@
 #include "stateManager.h"
 #include "..\app\appbase.h"
 #include "..\input\input.h"
+#include "..\3d\geo.h"
 
 namespace GLZ
 {
@@ -138,6 +139,7 @@ namespace GLZ
 		CurrentStateString = "";
 		CurrentState = nullptr;
 		states.clear();
+		glzKillAllVAO();
 	}
 
 	void glzStateManager::Update(float seconds)
