@@ -12,9 +12,12 @@ Before 2d game project:
 		text that fits in a box	
 
 
-
 3D Object class that takes care of object loading and management instead of having individual raw VAO
 	move individual primitive generation to their own files
+
+	
+Write a text class that inherits from the above class and handles all text rendering
+
 
 Resource manager for
 	3d Objects
