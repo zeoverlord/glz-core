@@ -42,10 +42,10 @@ namespace GLZ
 		float minval = inLightness - (0.5f*d);
 		x = d*(1 - abs(((int)(h2) % 2 + (h2)-(int)(h2)) - 1));
 
-		if(h2 >= 0.0f) { r = d + minval; x + minval; b = minval; }
-		if(h2 > 1.0f) { r = x + minval; d + minval; b = minval; }
-		if(h2 > 2.0f) { r = minval; d + minval; b = x + minval; }
-		if(h2 > 3.0f) { r = minval; x + minval; b = d + minval; }
+		if (h2 >= 0.0f) { r = d + minval; g = x + minval; b = minval; }
+		if (h2 > 1.0f) { r = x + minval; g = d + minval; b = minval; }
+		if (h2 > 2.0f) { r = minval; g = d + minval; b = x + minval; }
+		if (h2 > 3.0f) { r = minval; g = x + minval; b = d + minval; }
 		if(h2 > 4.0f) { r = x + minval; g = 0; b = d + minval; }
 		if(h2 > 5.0f) { r = inLightness + minval; g = 0; b = x + minval; }
 		if(h2 > 6.0f) { r = minval; g = 0; b = minval; }
@@ -92,10 +92,10 @@ namespace GLZ
 		float minval = inValue - d;
 		x = d*(1 - abs(((int)(h2) % 2 + (h2)-(int)(h2)) - 1));
 		
-		if(h2 >= 0.0f) { r = d + minval; x + minval; b = minval; }
-		if(h2 > 1.0f) { r = x + minval; d + minval; b = minval; }
-		if(h2 > 2.0f) { r = minval; d + minval; b = x + minval; }
-		if(h2 > 3.0f) { r = minval; x + minval; b = d + minval; }
+		if (h2 >= 0.0f) { r = d + minval; g = x + minval; b = minval; }
+		if (h2 > 1.0f) { r = x + minval; g = d + minval; b = minval; }
+		if (h2 > 2.0f) { r = minval; g = d + minval; b = x + minval; }
+		if (h2 > 3.0f) { r = minval; g = x + minval; b = d + minval; }
 		if(h2 > 4.0f) { r = x + minval; g = 0; b = d + minval; }
 		if(h2 > 5.0f) { r = inValue + minval; g = 0; b = x + minval; }
 		if(h2 > 6.0f) { r = minval; g = 0; b = minval; }
