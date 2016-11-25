@@ -70,6 +70,11 @@ namespace GLZ
 		glzColor(unsigned int rin, unsigned int gin, unsigned int bin, unsigned int ain = 255) : r(static_cast<float>(rin / 256.0f)), g(static_cast<float>(gin / 256.0f)), b(static_cast<float>(bin / 256.0f)), a(static_cast<float>(ain / 256.0f)) { recalcMaxMin(); }
 		glzColor(unsigned long inHex);
 
+		void hsl(float inHue, float inSaturation, float inLightness);
+		void hsi(float inHue, float inSaturation, float inIntensity);
+		void hsv(float inHue, float inSaturation, float inValue);
+		void hcy(float inHue, float inCroma, float inLuminance);
+
 		// these shouldn't really be used for blending
 		glzColor glzColor::operator() (float inR, float inG, float inB, float inA) { r = inR; g = inG; b = inB; a = inA; return *this; }
 		glzColor glzColor::operator() (float inR, float inG, float inB) { r = inR; g = inG; b = inB; return *this; }

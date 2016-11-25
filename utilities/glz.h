@@ -102,11 +102,8 @@ namespace GLZ
 
 
 	// image functions
-
 	unsigned int glz2dTo1dImageRemap(unsigned int x, unsigned int y, unsigned int col, unsigned int step, unsigned int width, unsigned int height, bool invert);
 	float glzImageReadBilinear(float x, float y, unsigned int col, unsigned int step, int width, int height, unsigned int mirror, unsigned char *data, bool invert);
-
-	float glzColorConvert(float a, float b, float c, glzColorType intype, glzColorChannels outtype);
 
 	// specialty code
 
