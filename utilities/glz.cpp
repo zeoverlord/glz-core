@@ -362,8 +362,9 @@ vec3 glzCrossproduct(vec3 a, vec3 b)
 
 unsigned int glz2dTo1dImageRemap(unsigned int x, unsigned int y, unsigned int col, unsigned int step, unsigned int width, unsigned int height, bool invert)
 {
-	if (invert) return (((((height-1)-y)*width)+x)*step)+col;
-	else return ((((width*y)*width)+x)*step)+col;
+	if(invert) return (((width*((height - 1) - y)) + x)*step) + col;
+	else return (((width*y)+x)*step)+col;
+
 
 }
 

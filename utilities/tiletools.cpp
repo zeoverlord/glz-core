@@ -59,7 +59,8 @@ namespace GLZ
 
 	char glztiles::get_pixel(int x, int y, int layer)
 	{
-		return data[glz2dTo1dImageRemap(x, y, layer, 4, imghdr.m_width, imghdr.m_height, true)];
+		char r=data[glz2dTo1dImageRemap(x, y, layer, 4, imghdr.m_width, imghdr.m_height, true)];
+		return r;
 	}
 
 	void glztiles::put_pixel(int x, int y, int layer, char value)
