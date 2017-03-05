@@ -74,41 +74,41 @@ namespace GLZ
 
 		if(ReferenceOrigin == glzOrigin::CENTERED)
 		{
-			right = ((tempRight + tempLeft)*0.5) + (resizedTempWidth*0.5f);
-			left = ((tempRight + tempLeft)*0.5) - (resizedTempWidth*0.5f);
+			right = ((tempRight + tempLeft)*0.5f) + (resizedTempWidth*0.5f);
+			left = ((tempRight + tempLeft)*0.5f) - (resizedTempWidth*0.5f);
 
-			top = ((tempTop + tempBottom)*0.5) + (resizedTempHeight*0.5f);
-			bottom = ((tempTop + tempBottom)*0.5) - (resizedTempHeight*0.5f);
+			top = ((tempTop + tempBottom)*0.5f) + (resizedTempHeight*0.5f);
+			bottom = ((tempTop + tempBottom)*0.5f) - (resizedTempHeight*0.5f);
 		}
 
 		if(ReferenceOrigin == glzOrigin::LEFT)
 		{
 			right = tempLeft + resizedTempWidth;
 			left = tempLeft;
-			top = ((tempTop + tempBottom)*0.5) + (resizedTempHeight*0.5f);
-			bottom = ((tempTop + tempBottom)*0.5) - (resizedTempHeight*0.5f);
+			top = ((tempTop + tempBottom)*0.5f) + (resizedTempHeight*0.5f);
+			bottom = ((tempTop + tempBottom)*0.5f) - (resizedTempHeight*0.5f);
 		}
 
 		if(ReferenceOrigin == glzOrigin::RIGHT)
 		{
 			right = tempRight;
 			left = tempRight - resizedTempWidth;
-			top = ((tempTop + tempBottom)*0.5) + (resizedTempHeight*0.5f);
-			bottom = ((tempTop + tempBottom)*0.5) - (resizedTempHeight*0.5f);
+			top = ((tempTop + tempBottom)*0.5f) + (resizedTempHeight*0.5f);
+			bottom = ((tempTop + tempBottom)*0.5f) - (resizedTempHeight*0.5f);
 		}
 
 		if(ReferenceOrigin == glzOrigin::TOP)
 		{
-			right = ((tempRight + tempLeft)*0.5) + (resizedTempWidth*0.5f);
-			left = ((tempRight + tempLeft)*0.5) - (resizedTempWidth*0.5f);
+			right = ((tempRight + tempLeft)*0.5f) + (resizedTempWidth*0.5f);
+			left = ((tempRight + tempLeft)*0.5f) - (resizedTempWidth*0.5f);
 			top = tempTop;
 			bottom = tempTop - resizedTempHeight;
 		}
 
 		if(ReferenceOrigin == glzOrigin::BOTTOM)
 		{
-			right = ((tempRight + tempLeft)*0.5) + (resizedTempWidth*0.5f);
-			left = ((tempRight + tempLeft)*0.5) - (resizedTempWidth*0.5f);
+			right = ((tempRight + tempLeft)*0.5f) + (resizedTempWidth*0.5f);
+			left = ((tempRight + tempLeft)*0.5f) - (resizedTempWidth*0.5f);
 			top = tempBottom + resizedTempHeight;
 			bottom = tempBottom;
 		}
@@ -131,10 +131,10 @@ namespace GLZ
 	{
 		float oAspect = (float)displayWidth / (float)displayHeight;
 
-		int newDisplayX = ((left + (oAspect*0.5)) / oAspect) * displayWidth;
-		int newDisplayY = (bottom + 0.5) * displayHeight;
-		int newDisplayWidth = (((right + (oAspect*0.5)) / oAspect) * displayWidth) - newDisplayX;
-		int newDisplayHeight = ((top + 0.5) * displayHeight) - newDisplayY;
+		int newDisplayX = ((left + (oAspect*0.5f)) / oAspect) * displayWidth;
+		int newDisplayY = (bottom + 0.5f) * displayHeight;
+		int newDisplayWidth = (((right + (oAspect*0.5f)) / oAspect) * displayWidth) - newDisplayX;
+		int newDisplayHeight = ((top + 0.5f) * displayHeight) - newDisplayY;
 
 		glViewport(newDisplayX, newDisplayY, newDisplayWidth, newDisplayHeight);
 

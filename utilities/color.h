@@ -46,18 +46,38 @@ namespace GLZ
 {
 
 	class glzColor {
+
+
+	private:
+		char max;
+		char min ;
+		float maxval;
+		float minval;
+
+		float delta;
+		float alpha;
+		float beta;
+		float h;
+
+
+		void recalcMaxMin();
+
 	public:
 		float r, g, b, a;
 
+		glzColor() : r(0.0), g(0.0), b(0.0), a(1.0) { recalcMaxMin(); }
+		glzColor(float rin, float gin, float bin, float ain=1.0f) : r(rin), g(gin), b(bin), a(ain) { recalcMaxMin(); }
+		glzColor(unsigned int rin, unsigned int gin, unsigned int bin, unsigned int ain = 255) : r(static_cast<float>(rin / 256.0f)), g(static_cast<float>(gin / 256.0f)), b(static_cast<float>(bin / 256.0f)), a(static_cast<float>(ain / 256.0f)) { recalcMaxMin(); }
+		glzColor(unsigned long inHex);
 
-		glzColor() : r(0.0), g(0.0), b(0.0), a(1.0) {}
-		//color() : r(0.0), g(0.0), b(0.0) {}
-		glzColor(float rin, float gin, float bin, float ain) : r(rin), g(gin), b(bin), a(ain) {}
+		void hsl(float inHue, float inSaturation, float inLightness);
+		void hsi(float inHue, float inSaturation, float inIntensity);
+		void hsv(float inHue, float inSaturation, float inValue);
+		void hcy(float inHue, float inCroma, float inLuminance);
 
 		// these shouldn't really be used for blending
 		glzColor glzColor::operator() (float inR, float inG, float inB, float inA) { r = inR; g = inG; b = inB; a = inA; return *this; }
 		glzColor glzColor::operator() (float inR, float inG, float inB) { r = inR; g = inG; b = inB; return *this; }
-
 
 		glzColor glzColor::operator+ (glzColor c) { return glzColor(r + c.r, g + c.g, b + c.b, a + c.a); }
 		glzColor glzColor::operator+= (glzColor c) { r += c.r; g += c.g; b += c.b; a += c.a; return *this; }
@@ -78,10 +98,23 @@ namespace GLZ
 		glzColor glzColor::operator/= (glzColor c) { r /= c.r; g /= c.g; b /= c.b; a /= c.a; return *this; }
 		glzColor glzColor::operator/ (float c) { return glzColor(r / c, g / c, b / c, a); }
 		glzColor glzColor::operator/= (float c) { r /= c; g /= c; b /= c; return *this; }
+		
+		float hue();
+		float hue2();
+		float croma();
 
+		float croma2();
+		float value();
+		float lightness();
+		float intensity();
+		float luma();
+		float shsv();
+		float shsl();
+		float shsi();
 
+		unsigned long hex();
+		unsigned long hex32();
 	};
-
 
 	inline glzColor operator+ (float c, glzColor a) { return glzColor(a.r + c, a.g + c, a.b + c, a.a); }
 	inline glzColor operator- (float c, glzColor a) { return glzColor(a.r - c, a.g - c, a.b - c, a.a); }

@@ -71,7 +71,7 @@ namespace GLZ
 			label = -1;
 			n_local = node3();
 			blend = glzBlendingMode::NONE;
-			blendcolor = glzColor(1.0, 1.0, 1.0, 1.0);
+			blendcolor = glzColor(1.0f, 1.0f, 1.0f, 1.0f);
 			alpha = 1.0f;
 			width = 100.0f;
 			height = 100.0f;

@@ -30,6 +30,7 @@
 #include <gl/gl.h>														// Header File For The OpenGL32 Library
 #include <gl/glu.h>														// Header File For The GLu32 Library
 #include <gl/glext.h>
+#include "..\app\appbase.h"
 
 #include <vector>
 
@@ -332,32 +333,37 @@ long glzCountFromIndexArrays(long vert_face[],int enteries)
 
 // public stuff
 
-void addToVaoList(unsigned int vao, glzVAOType type)
+void addToVaoList(unsigned int vao, glzVAOType type, GLuint *inVbVertex, GLuint *inVbTexture, GLuint *inVbNormal)
 {
 	vaostatus v;
 	v.vao = vao;
 	v.type = type;
+	v.vbVertex = inVbVertex;
+	v.vbTexture = inVbTexture;
+	v.vbNormal = inVbNormal;
+	v.active = true;
 	active_vao.push_back(v);
 
 	return;
 }
 
-void removeFromVaoList(unsigned int vao)
+void cleanUpVaoList()
 {
-	//int i = 0;
-
+	int i2 = 0;
 	auto i = active_vao.begin();
 
-	for(auto a : active_vao)
-	{	
-		if(a.vao == vao)
-		{
-			active_vao.erase(i);
-			return;
-		}
-		i++;
-	}
+	i2 = 0; // o yes this is way uggly, but i think it woks
+	while (i < active_vao.end()) {
 
+		if (active_vao[i2].active == false)
+		{
+			i = active_vao.erase(i);
+		}
+		else {
+			++i;
+			i2++;
+		}
+	}
 	return;
 }
 
@@ -803,7 +809,7 @@ void glzVAOMakeFromArray(float v[], float t[], float n[], long enteties, unsigne
 	if (glIsVertexArray((GLuint)&vao)== GL_FALSE) glzKillVAO(vaopoint);
 
 	unsigned int vaotemp;
-	unsigned int buffer[3];
+	GLuint buffer[3];
 
 	
 	glGenVertexArrays(1, &vaotemp);   //generate the vao for this mesh
@@ -838,7 +844,7 @@ void glzVAOMakeFromArray(float v[], float t[], float n[], long enteties, unsigne
 	glBindVertexArray(0);
 
 	vao[0]=vaotemp;
-	addToVaoList(vaotemp,type);
+	addToVaoList(vaotemp, type, &buffer[0], &buffer[1], &buffer[2]);
 
 return;
 
@@ -855,7 +861,7 @@ void glzVAOMakeFromVector(std::vector<poly3> pdata, unsigned int *vao, glzVAOTyp
 	if (glIsVertexArray((GLuint)&vao) == GL_FALSE) glzKillVAO(vaopoint);
 
 	unsigned int vaotemp;
-	unsigned int buffer[3];
+	GLuint buffer[3];
 
 	float *v, *t, *n;
 	v = new float[pdata.size() * 3 * 3];
@@ -899,7 +905,7 @@ void glzVAOMakeFromVector(std::vector<poly3> pdata, unsigned int *vao, glzVAOTyp
 	glBindVertexArray(0);
 
 	vao[0] = vaotemp;
-	addToVaoList(vaotemp,type);
+	addToVaoList(vaotemp, type, &buffer[0], &buffer[1], &buffer[2]);
 
 
 	delete[] v;
@@ -924,7 +930,7 @@ void glzVAOMakeFromVector(std::vector<point3> pdata, unsigned int *vao, glzVAOTy
 	if (glIsVertexArray((GLuint)&vao) == GL_FALSE) glzKillVAO(vaopoint);
 
 	unsigned int vaotemp;
-	unsigned int buffer[3];
+	GLuint buffer[3];
 
 	float *v, *t, *n;
 	v = new float[pdata.size() * 3];
@@ -968,7 +974,7 @@ void glzVAOMakeFromVector(std::vector<point3> pdata, unsigned int *vao, glzVAOTy
 	glBindVertexArray(0);
 
 	vao[0] = vaotemp;
-	addToVaoList(vaotemp, type);
+	addToVaoList(vaotemp, type, &buffer[0], &buffer[1], &buffer[2]);
 
 
 	delete[] v;
@@ -1122,39 +1128,31 @@ void glzDirectCubeRender(float X, float Y, float Z, float W, float H, float D, t
 }
 
 
-
-
 void glzKillVAO(unsigned int inVao)
 {
+
+	for (auto &a : active_vao)
+		if (a.vao == inVao)
+		{ 
+			glzKillVAO(a);
+			return;
+		}
+
+}
+
+
+
+void glzKillVAO(vaostatus inVao)
+{
 	if (!isinited_geo) ini_geo();
-	if(!glIsVertexArray(inVao)) return; // is this a vao
-
-	glzVAOType type = getTypeFromVaoList(inVao);
-
-	glBindVertexArray(inVao);
-
+	if(!glIsVertexArray(inVao.vao)) return; // is this a vao
 	
+	if (glIsBuffer(*inVao.vbVertex)) glDeleteBuffers(1, inVao.vbVertex);
+	if (glIsBuffer(*inVao.vbTexture)) glDeleteBuffers(1, inVao.vbTexture);
+	if (glIsBuffer(*inVao.vbNormal)) glDeleteBuffers(1, inVao.vbNormal);
 
-	unsigned int vbuf;
-	glGetVertexAttribiv(0,GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING,(GLint*)&vbuf);
-	if( glIsBuffer(vbuf)) glDeleteBuffers(1,&vbuf);
-
-	if ((type == glzVAOType::AUTO) || (type == glzVAOType::VERTEX) || (type == glzVAOType::VERTEX_TEXTURE))
-	{
-		glGetVertexAttribiv(1, GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING, (GLint*)&vbuf);
-	if( glIsBuffer(vbuf))  glDeleteBuffers(1,&vbuf);
-	}
-
-	if ((type == glzVAOType::AUTO) || (type == glzVAOType::VERTEX) || (type == glzVAOType::VERTEX_NORMAL) || (type == glzVAOType::VERTEX_TEXTURE_NORMAL))
-	{
-		glGetVertexAttribiv(2, GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING, (GLint*)&vbuf);
-	if( glIsBuffer(vbuf))  glDeleteBuffers(1,&vbuf);
-	}
-	
-
-	glDeleteVertexArrays(1, reinterpret_cast<GLuint *>(&inVao));
-	glBindVertexArray(0);
-	removeFromVaoList(inVao);
+	glDeleteVertexArrays(1, reinterpret_cast<GLuint *>(&inVao.vao));
+	inVao.active = false;
 	return;
 }
 
@@ -1164,8 +1162,8 @@ void glzKillAllVAO(void)
 	if (!isinited_geo) ini_geo();
 
 	for(auto &a:active_vao)
-		glzKillVAO(a.vao);
-
+		glzKillVAO(a);
+	
 	active_vao.clear();
 	
 	return;

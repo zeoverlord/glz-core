@@ -161,6 +161,7 @@ namespace GLZ
 		if (inputData.joyInfoEx.dwButtons & (DWORD)inButton) return true;
 		return false;
 	}
+
 	float glzInput::getJoyAxis(glzInputJoyAxis inAxis)
 	{
 		if(inAxis == glzInputJoyAxis::eX) return (float)(inputData.joyInfoEx.dwXpos / (inputData.joyCaps.wXmax / 2.0f) - 1.0f);
@@ -170,6 +171,7 @@ namespace GLZ
 		if(inAxis == glzInputJoyAxis::eR) return (float)(inputData.joyInfoEx.dwXpos / (inputData.joyCaps.wXmax / 2.0f) - 1.0f);
 		if(inAxis == glzInputJoyAxis::eU) return (float)(inputData.joyInfoEx.dwXpos / (inputData.joyCaps.wXmax / 2.0f) - 1.0f);
 		if(inAxis == glzInputJoyAxis::eV) return (float)(inputData.joyInfoEx.dwXpos / (inputData.joyCaps.wXmax / 2.0f) - 1.0f);
+		return 0.0f;
 	}
 
 	float glzInput::getJoyPOV(void)
