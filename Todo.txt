@@ -29,8 +29,7 @@ Start reorganizing image loading
 
 
 Other stuff
-	expand color class to include color conversion
-		Investigate srgb and adobeRGB
+	Investigate srgb and adobeRGB
 
 	Start splitting vectormath and glz into multiple files and give each class its own file
 
