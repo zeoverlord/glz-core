@@ -29,9 +29,9 @@ namespace GLZ
 	{
 		img_filename = filename;
 
-		glzReadTgaHead(&imghdr, img_filename);
+		glzReadImageHead(&imghdr, img_filename);
 		data = new unsigned char[imghdr.imageSize];
-		glzLoadTga(&imghdr, img_filename, data);
+		glzLoadImage(&imghdr, img_filename, data);
 		glzMaketex(&imghdr, data, glzTexFilter::NEAREST);
 		tex = imghdr.m_id;
 
@@ -46,7 +46,10 @@ namespace GLZ
 
 	void glztiles::update_texture(void)
 	{
-		if(!tex_changed) return;
+		if(!tex_changed)
+		{
+			return;
+		}
 		glBindTexture(GL_TEXTURE_2D, tex);
 		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, imghdr.m_width, imghdr.m_height, imghdr.m_type, GL_UNSIGNED_BYTE, data);
 		tex_changed = false;
@@ -54,12 +57,15 @@ namespace GLZ
 
 	void glztiles::save(void)
 	{
-		if(data_changed) glzSaveTGA(img_filename, imghdr.m_width, imghdr.m_height, glzTexCompression::COMPRESSED, imghdr.m_type, data);
+		if(data_changed)
+		{
+			glzSaveImage(img_filename, imghdr.m_width, imghdr.m_height, glzTexCompression::COMPRESSED, imghdr.m_type, data);
+		}
 	}
 
 	char glztiles::get_pixel(int x, int y, int layer)
 	{
-		char r=data[glz2dTo1dImageRemap(x, y, layer, 4, imghdr.m_width, imghdr.m_height, true)];
+		char r = data[glz2dTo1dImageRemap(x, y, layer, 4, imghdr.m_width, imghdr.m_height, true)];
 		return r;
 	}
 
@@ -85,7 +91,10 @@ namespace GLZ
 			// get data
 
 
-			if(layer == 2) d_o = 2;
+			if(layer == 2)
+			{
+				d_o = 2;
+			}
 
 			dx = get_pixel(x, y, d_o);
 			dy = get_pixel(x, y, d_o + 1);
@@ -94,16 +103,39 @@ namespace GLZ
 			//dy = data[glz2dTo1dImageRemap(x, y, 1 + d_o, 4, imghdr.m_width, imghdr.m_height, true)];
 
 			bool ani = false, ext = false;
-			if(dx > 127) { dx -= 128; ani = true; }
-			if(dy > 127) { dy -= 128; ext = true; }
+			if(dx > 127)
+			{
+				dx -= 128;
+				ani = true;
+			}
+			if(dy > 127)
+			{
+				dy -= 128;
+				ext = true;
+			}
 
-			if((sx == dx) && (sy == dy) && (animate == ani) && (flip == ext)) return; //no change so do nothing
+			if((sx == dx) && (sy == dy) && (animate == ani) && (flip == ext))
+			{
+				return;    //no change so do nothing
+			}
 
-			if(sx > 127) sx = 127;
-			if(sy > 127) sy = 127;
+			if(sx > 127)
+			{
+				sx = 127;
+			}
+			if(sy > 127)
+			{
+				sy = 127;
+			}
 
-			if(animate) sx += 128;
-			if(flip) sy += 128;
+			if(animate)
+			{
+				sx += 128;
+			}
+			if(flip)
+			{
+				sy += 128;
+			}
 
 
 			put_pixel(x, y, d_o, sx);
@@ -118,10 +150,22 @@ namespace GLZ
 
 		else
 		{
-			if(layer == 1) d_o = 0;
-			if(layer == 2) d_o = 1;
-			if(layer == 3) d_o = 2;
-			if(layer == 4) d_o = 3;
+			if(layer == 1)
+			{
+				d_o = 0;
+			}
+			if(layer == 2)
+			{
+				d_o = 1;
+			}
+			if(layer == 3)
+			{
+				d_o = 2;
+			}
+			if(layer == 4)
+			{
+				d_o = 3;
+			}
 
 			//dx = data[glz2dTo1dImageRemap(x, y, 0 + d_o, 4, imghdr.m_width, imghdr.m_height, true)];
 			//data[glz2dTo1dImageRemap(x, y, 0 + d_o, 4, imghdr.m_width, imghdr.m_height, true)] = sx;
@@ -134,12 +178,18 @@ namespace GLZ
 
 	void glztiles::put_extra_bit(int x, int y, bool bitdata, int layer)
 	{
-		if(type != glzTileType::DOUBLE_LAYER) return; // only double layer tilemaps have extra bits
+		if(type != glzTileType::DOUBLE_LAYER)
+		{
+			return;    // only double layer tilemaps have extra bits
+		}
 
 		char pxdata = get_pixel(x, y, layer);
 
 		pxdata = pxdata & 127; // strip bit data
-		if(bitdata) pxdata = pxdata | 128; // add bit data if needed
+		if(bitdata)
+		{
+			pxdata = pxdata | 128;    // add bit data if needed
+		}
 
 
 		put_pixel(x, y, layer, pxdata);
@@ -153,14 +203,32 @@ namespace GLZ
 	{
 
 		//test if coords are inside tile area, if not return false.
-		if(x < 00.0f) return false;
-		if(x >= width) return false;
+		if(x < 00.0f)
+		{
+			return false;
+		}
+		if(x >= width)
+		{
+			return false;
+		}
 
-		if(y < 0.0f) return false;
-		if(y > height) return false;
+		if(y < 0.0f)
+		{
+			return false;
+		}
+		if(y > height)
+		{
+			return false;
+		}
 
-		if(layer < 1) return false;
-		if(layer > 4) return false;
+		if(layer < 1)
+		{
+			return false;
+		}
+		if(layer > 4)
+		{
+			return false;
+		}
 
 
 
@@ -179,77 +247,106 @@ namespace GLZ
 
 		switch(td)
 		{
-		case 0: //fully transparent
-			return false;
-			break;
+			case 0: //fully transparent
+				return false;
+				break;
 
-		case 18:  //fully opaque
-			return true;
-			break;
-
-		case 38:  // 45 degree slope with lower right opaque
-			if(xf + yf > 1.0)
+			case 18:  //fully opaque
 				return true;
-			break;
+				break;
 
-		case 39:  // 45 degree slope with lower left opaque
-			if((1.0 - xf) + yf > 1.0) return true;
-			break;
+			case 38:  // 45 degree slope with lower right opaque
+				if(xf + yf > 1.0)
+				{
+					return true;
+				}
+				break;
 
-		case 17:
-		case 52:  // right half opaque vertical 
-			if(xf > 0.5)
-				return true;
-			break;
+			case 39:  // 45 degree slope with lower left opaque
+				if((1.0 - xf) + yf > 1.0)
+				{
+					return true;
+				}
+				break;
 
-		case 19:
-		case 53:  // left half opaque vertical 
-			if(1.0 - xf > 0.5)
-				return true;
-			break;
+			case 17:
+			case 52:  // right half opaque vertical
+				if(xf > 0.5)
+				{
+					return true;
+				}
+				break;
+
+			case 19:
+			case 53:  // left half opaque vertical
+				if(1.0 - xf > 0.5)
+				{
+					return true;
+				}
+				break;
 
 
-		case 54:  // 45 degree slope with upper right opaque
-			if((1.0 - xf) + yf < 1.0) return true;
-			break;
+			case 54:  // 45 degree slope with upper right opaque
+				if((1.0 - xf) + yf < 1.0)
+				{
+					return true;
+				}
+				break;
 
-		case 55:  // 45 degree slope with upper left opaque
-			if(xf + yf < 1.0) return true;
-			break;
+			case 55:  // 45 degree slope with upper left opaque
+				if(xf + yf < 1.0)
+				{
+					return true;
+				}
+				break;
 
-		case 70:  // 45 degree half slope with lower right opaque
-			if(xf + yf > 1.5)
-				return true;
-			break;
+			case 70:  // 45 degree half slope with lower right opaque
+				if(xf + yf > 1.5)
+				{
+					return true;
+				}
+				break;
 
-		case 71:  // 45 degree slope with lower left opaque
-			if((1.0 - xf) + yf > 1.5) return true;
-			break;
+			case 71:  // 45 degree slope with lower left opaque
+				if((1.0 - xf) + yf > 1.5)
+				{
+					return true;
+				}
+				break;
 
-		case 86:  // 45 degree half slope with lower right opaque
-			if((1.0 - xf) + yf < 0.5)
-				return true;
-			break;
+			case 86:  // 45 degree half slope with lower right opaque
+				if((1.0 - xf) + yf < 0.5)
+				{
+					return true;
+				}
+				break;
 
-		case 87:  // 45 degree slope with lower left opaque
-			if(xf + yf<0.5) return true;
-			break;
+			case 87:  // 45 degree slope with lower left opaque
+				if(xf + yf < 0.5)
+				{
+					return true;
+				}
+				break;
 
-		case 2:
-		case 103:  // right half opaque horizontal 
-			if(yf >0.5)
-				return true;
-			break;
+			case 2:
+			case 103:  // right half opaque horizontal
+				if(yf > 0.5)
+				{
+					return true;
+				}
+				break;
 
-		case 34:
-		case 119:  // left half opaque horizontal 
-			if(1.0 - yf > 0.5)
-				return true;
-			break;
+			case 34:
+			case 119:  // left half opaque horizontal
+				if(1.0 - yf > 0.5)
+				{
+					return true;
+				}
+				break;
 
-		default:
+			default:
 
-			break;
+				break;
 		}
 
 

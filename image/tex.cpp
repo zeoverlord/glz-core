@@ -24,7 +24,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include "tex.h"
-#include "tga.h"
+#include "imageTGA.h"
+#include "imagePNG.h"
 #include <stdio.h>
 #include <windows.h>													// Header File For The Windows Library
 #include <gl/gl.h>														// Header File For The OpenGL32 Library
@@ -251,10 +252,20 @@ namespace GLZ
 			glzReadTgaHead(&img, filename);
 		}
 
+		if(getFiletype(filename) == glzFileTypes::PNG)
+		{
+			glzReadPngHead(&img, filename);
+		}
+
 		data = new unsigned char[img.imageSize];
 		if(getFiletype(filename) == glzFileTypes::TGA)
 		{
 			glzLoadTga(&img, filename, data);
+		}
+
+		if(getFiletype(filename) == glzFileTypes::PNG)
+		{
+			glzLoadPng(&img, filename, data);
 		}
 		glzMaketex(&img, data, filter);
 
@@ -287,11 +298,56 @@ namespace GLZ
 
 		if(getFiletype(filename) == glzFileTypes::TGA)
 		{
-			glzSaveTGA(filename, x, y, type, GL_RGB, data);
+			glzSaveTga(filename, x, y, type, GL_RGB, data);
+		}
+
+		if(getFiletype(filename) == glzFileTypes::PNG)
+		{
+			glzSavePng(filename, x, y, type, GL_RGB, data);
 		}
 
 		delete[] data;
 		data = NULL;
+	}
+
+	void glzReadImageHead(img_head *img, std::string filename)
+	{
+		if(getFiletype(filename) == glzFileTypes::TGA)
+		{
+			glzReadTgaHead(img, filename);
+		}
+
+		if(getFiletype(filename) == glzFileTypes::PNG)
+		{
+			glzReadPngHead(img, filename);
+		}
+
+	}
+
+	void glzLoadImage(img_head *img, std::string filename, unsigned char *data)
+	{
+		if(getFiletype(filename) == glzFileTypes::TGA)
+		{
+			glzLoadTga(img, filename, data);
+		}
+
+		if(getFiletype(filename) == glzFileTypes::PNG)
+		{
+			glzLoadPng(img, filename, data);
+		}
+	}
+
+	void glzSaveImage(std::string filename, int x, int y, glzTexCompression type, unsigned int tex_type, unsigned char *in_data)
+	{
+		if(getFiletype(filename) == glzFileTypes::TGA)
+		{
+			glzSaveTga(filename, x, y, type, tex_type, in_data);
+		}
+
+		if(getFiletype(filename) == glzFileTypes::PNG)
+		{
+			glzSavePng(filename, x, y, type, tex_type, in_data);
+		}
 	}
 
 }

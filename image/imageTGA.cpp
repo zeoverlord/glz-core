@@ -23,7 +23,7 @@
 #include <fstream>
 #include <string.h>
 #include <stdlib.h>
-#include "tga.h"
+#include "ImageTGA.h"
 #include <stdio.h>
 #include <windows.h>													// Header File For The Windows Library
 #include <gl/gl.h>														// Header File For The OpenGL32 Library
@@ -215,7 +215,7 @@ namespace GLZ
 
 
 
-	void glzSaveTGA(std::string filename, int x, int y, glzTexCompression type, unsigned int tex_type, unsigned char *in_data)
+	void glzSaveTga(std::string filename, int x, int y, glzTexCompression type, unsigned int tex_type, unsigned char *in_data)
 	{
 		bool has_alpha = false;
 		if(tex_type == GL_RGBA)

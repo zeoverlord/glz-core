@@ -23,7 +23,6 @@
 
 #include "..\utilities\type.h"
 #include "textureData.h"
-#include "tga.h"
 
 namespace GLZ
 {
@@ -39,16 +38,20 @@ namespace GLZ
 	unsigned int glzGetDefaultTextturehandle(void);
 	// segmented loading, for if you want to load a texture into the cpu
 	void glzMaketex(img_head *img, unsigned char data[], glzTexFilter filter);
-
 	unsigned int glzLoadTexture(std::string filename, glzTexFilter filter);  // type is here which image type (same as in openGL) and filter is the texture filtering
-	// this load function only loads either TGA files or whtever the file ending is, but that's for another version
+
+
+	void glzReadImageHead(img_head *img, std::string filename);
+	void glzLoadImage(img_head *img, std::string filename, unsigned char *data);
+
 
 
 	// saving
 
-
 	void glzScreenShot(std::string filename, int x, int y, glzTexCompression type);  // auto saves a compressed file
 	void glzScreenShotADV(std::string filename, int xoffset, int yoffset, int x, int y, glzTexCompression type);
+
+	void glzSaveImage(std::string filename, int x, int y, glzTexCompression type, unsigned int tex_type, unsigned char *in_data);
 }
 
 /*

@@ -32,5 +32,5 @@ namespace GLZ
 	void glzReadTgaHead(img_head *img, std::string filename);
 	void glzLoadTga(img_head *img, std::string filename, unsigned char *data);
 	// saving
-	void glzSaveTGA(std::string filename, int x, int y, glzTexCompression type, unsigned int tex_type, unsigned char *in_data);
+	void glzSaveTga(std::string filename, int x, int y, glzTexCompression type, unsigned int tex_type, unsigned char *in_data);
 }
