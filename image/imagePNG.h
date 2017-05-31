@@ -32,5 +32,5 @@ namespace GLZ
 	void glzReadPngHead(img_head *img, std::string filename);
 	void glzLoadPng(img_head *img, std::string filename, unsigned char *data);
 	// saving
-	void glzSavePng(std::string filename, int x, int y, glzTexCompression type, unsigned int tex_type, unsigned char *in_data);
+	void glzSavePng(std::string filename, int w, int h, glzTexCompression type, unsigned int tex_type, unsigned char *in_data);
 }

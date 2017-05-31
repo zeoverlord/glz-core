@@ -48,7 +48,7 @@ namespace GLZ
 		img->m_id = 0;
 		img->m_type = 0;
 		img->imageSize = 0;
-		img->origin = glzOrigin::TOP_LEFT;
+		img->origin = glzOrigin::BOTTOM_LEFT;
 
 		std::vector<unsigned char> buffer;
 		std::vector<unsigned char> image;
@@ -80,12 +80,12 @@ namespace GLZ
 		std::vector<unsigned char> image;
 		unsigned error = lodepng::decode(image, w, h, filename);
 		int i = 0;
-		for(unsigned char value : image)
-		{
-			data[i] = value;
-			++i;
-		}
 
+		for(int y = 0; y < img->m_height; y++)
+			for(int x = 0; x < img->m_width * img->m_bpp; x++)
+			{
+				data[(y * img->m_width * img->m_bpp) + x] = image[(((img->m_height - 1) - y) * img->m_width * img->m_bpp) + x];
+			}
 
 		img->m_type = GL_RGB;
 		if(img->m_bpp == 4)
@@ -97,32 +97,28 @@ namespace GLZ
 	}
 
 
-
-
-	void glzSavePng(std::string filename, int x, int y, glzTexCompression type, unsigned int tex_type, unsigned char *in_data)
+	void glzSavePng(std::string filename, int w, int h, glzTexCompression type, unsigned int tex_type, unsigned char *in_data)
 	{
-		bool has_alpha = false;
+		int bpp;
+		LodePNGColorType colorType;
 		if(tex_type == GL_RGBA)
 		{
-			has_alpha = true;
+			colorType = LodePNGColorType::LCT_RGBA;
+			bpp = 4;
 		}
 		if(tex_type == GL_RGB)
 		{
-			has_alpha = false;
+			colorType = LodePNGColorType::LCT_RGB;
+			bpp = 3;
 		}
+		std::vector<unsigned char> image;
 
-		// get the image data
-		long imageSize = x * y * 3;
-		if(has_alpha)
-		{
-			imageSize = x * y * 4;
-		}
-		unsigned char *data = new unsigned char[imageSize];
-		unsigned char cdata[4];  //new space for an yline
+		for(int y = 0; y < h; y++)
+			for(int x = 0; x < w * bpp; x++)
+			{
+				image.push_back(in_data[(((h - 1) - y) * w * bpp) + x]);
+			}
 
-
-		delete(data);
-
+		lodepng::encode(filename, image, w, h, colorType);
 	}
-
 }
