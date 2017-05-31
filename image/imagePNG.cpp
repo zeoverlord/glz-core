@@ -31,7 +31,7 @@
 #include <gl/glext.h>
 #include "..\app\appbase.h"
 
-#include <png.h>
+#include "png/lodepng.h"
 
 namespace GLZ
 {
@@ -48,50 +48,25 @@ namespace GLZ
 		img->m_id = 0;
 		img->m_type = 0;
 		img->imageSize = 0;
-		img->origin = glzOrigin::BOTTOM_LEFT;
+		img->origin = glzOrigin::TOP_LEFT;
 
-		unsigned char header[8];    // 8 is the maximum size that can be checked
+		std::vector<unsigned char> buffer;
+		std::vector<unsigned char> image;
+		unsigned int w, h;
 
-		FILE *fp = fopen(filename.c_str(), "rb");
-
-		png_structp png = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
-		if(!png)
+		if(lodepng::load_file(buffer, filename)) //load the image file with given filename
 		{
 			return;
 		}
 
-		png_infop info = png_create_info_struct(png);
-		if(!info)
-		{
-			png_destroy_write_struct(&png, &info);
-			return;
-		}
+		lodepng::State state;
 
-		if(setjmp(png_jmpbuf(png)))
-		{
-			png_destroy_write_struct(&png, &info);
-			return;
-		}
+		unsigned error = lodepng::decode(image, w, h, state, buffer);
+		img->m_bpp = lodepng_get_channels(&state.info_png.color);
 
-		png_init_io(png, fp);
-
-		png_read_info(png, info);
-
-		img->m_width = png_get_image_width(png, info);
-		img->m_height = png_get_image_height(png, info);
-		if(png_get_color_type(png, info) == PNG_COLOR_TYPE_RGB)
-		{
-			img->m_bpp = 3;
-		}
-
-		if(png_get_color_type(png, info) != PNG_COLOR_TYPE_RGBA)
-		{
-			img->m_bpp = 4;
-		}
-
+		img->m_width = w;
+		img->m_height = h;
 		img->imageSize = img->m_width * img->m_height * img->m_bpp;
-
-		fclose(fp);
 		return;
 	}
 
@@ -100,89 +75,23 @@ namespace GLZ
 
 	void glzLoadPng(img_head *img, std::string filename, unsigned char *data)
 	{
-		int x, y;
-		png_infop info_ptr;
-		png_bytep * row_pointers;
+		unsigned int w, h;
 
-		unsigned char header[8];    // 8 is the maximum size that can be checked
-
-		/* open file and test for it being a png */
-		FILE *fp = fopen(filename.c_str(), "rb");
-		if(!fp)
+		std::vector<unsigned char> image;
+		unsigned error = lodepng::decode(image, w, h, filename);
+		int i = 0;
+		for(unsigned char value : image)
 		{
-			return;
-		}
-		fread(header, 1, 8, fp);
-		if(!png_check_sig(header, 8))
-		{
-			return;
+			data[i] = value;
+			++i;
 		}
 
 
-		/* initialize stuff */
-		png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
-
-		if(!png_ptr)
+		img->m_type = GL_RGB;
+		if(img->m_bpp == 4)
 		{
-			return;
+			img->m_type = GL_RGBA;
 		}
-
-		info_ptr = png_create_info_struct(png_ptr);
-		if(!info_ptr)
-		{
-			return;
-		}
-
-		if(setjmp(png_jmpbuf(png_ptr)))
-		{
-			return;
-		}
-
-		png_init_io(png_ptr, fp);
-		png_set_sig_bytes(png_ptr, 8);
-
-		png_read_info(png_ptr, info_ptr);
-
-		img->m_width = png_get_image_width(png_ptr, info_ptr);
-		img->m_height = png_get_image_height(png_ptr, info_ptr);
-		png_read_update_info(png_ptr, info_ptr);
-
-
-		/* read file */
-		if(setjmp(png_jmpbuf(png_ptr)))
-		{
-			return;
-		}
-
-		row_pointers = (png_bytep*)malloc(sizeof(png_bytep) * img->m_height);
-		for(y = 0; y < img->m_height; y++)
-		{
-			row_pointers[y] = (png_byte*)malloc(png_get_rowbytes(png_ptr, info_ptr));
-		}
-
-		png_read_image(png_ptr, row_pointers);
-
-		fclose(fp);
-
-		if(png_get_color_type(png_ptr, info_ptr) == PNG_COLOR_TYPE_RGB)
-		{
-			img->m_bpp = 3;
-		}
-
-		if(png_get_color_type(png_ptr, info_ptr) != PNG_COLOR_TYPE_RGBA)
-		{
-			img->m_bpp = 4;
-		}
-
-		for(y = 0; y < img->m_height; y++)
-		{
-			png_byte* row = row_pointers[y];
-			for(x = 0; x < img->m_width * img->m_bpp; x++)
-			{
-				data[y * img->m_height + x] = row[x];
-			}
-		}
-
 
 		return;
 	}
