@@ -128,7 +128,7 @@ namespace GLZ
 	bool glzStateManager::Initialize(int width, int height)
 	{
 		view.setDisplay(0, 0, width, height);
-		return CurrentState->Initialize(view.getDisplayWidth(), view.getDisplayHeigth());
+		return CurrentState->Initialize(width, height);
 	}
 
 	void glzStateManager::Deinitialize(void)

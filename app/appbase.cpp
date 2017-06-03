@@ -42,6 +42,8 @@ namespace GLZ
 		WINDOW_HEIGHT = 500;
 		FULLSCREEN_WIDTH = 1920;
 		FULLSCREEN_HEIGHT = 1080;
+		WINDOW_GUI_SCALING_X = 1.0f;
+		WINDOW_GUI_SCALING_Y = 1.0f;
 		NATIVE_FULLSCREEN = true;					// generally speaking this should be st to true, most often the current resolution is the higest anyway, overides the above settigns
 		WINDOW_X = 0;
 		WINDOW_Y = 0;

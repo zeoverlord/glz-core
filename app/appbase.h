@@ -42,6 +42,8 @@ namespace GLZ
 		unsigned int  WINDOW_HEIGHT;
 		unsigned int  FULLSCREEN_WIDTH;
 		unsigned int  FULLSCREEN_HEIGHT;
+		float WINDOW_GUI_SCALING_X;
+		float WINDOW_GUI_SCALING_Y;
 		bool  NATIVE_FULLSCREEN;					// generally speaking this should be st to true, most often the current resolution is the higest anyway, overides the above settigns
 		unsigned int  WINDOW_X;
 		unsigned int  WINDOW_Y;
