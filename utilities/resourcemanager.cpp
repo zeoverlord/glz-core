@@ -56,13 +56,15 @@ namespace GLZ
 		bool foundname = false;
 
 		for(auto& a : texturestore)
-			if(a.objectname == name) { foundname = true; }
+			if(a.objectname == name)
+			{
+				foundname = true;
+			}
 
 		if(foundname == false)
 		{
 			tx.objectname = name;
 			tx.handle = ri.getDefaultexture();
-			//tx.handle = glzLoadTexture(filename, filter);	
 			tx.uid = ri.getNewId();
 			texturestore.push_back(tx);
 		}
@@ -81,7 +83,8 @@ namespace GLZ
 	texturecontainer* glzResourcemanager::gettexture(std::string name)
 	{
 		for(auto& a : texturestore)
-			if(a.objectname == name) {
+			if(a.objectname == name)
+			{
 				//tcon =;
 				return &a;
 			}
@@ -93,7 +96,8 @@ namespace GLZ
 		texturestore.push_back(tx);
 
 		for(auto& a : texturestore)
-			if(a.objectname == name) {
+			if(a.objectname == name)
+			{
 				//tcon =;
 				return &a;
 			}
@@ -136,16 +140,23 @@ namespace GLZ
 	{
 
 
-		if(textureloadstore.size() == 0) return false;
+		if(textureloadstore.size() == 0)
+		{
+			return false;
+		}
 
-		sort(textureloadstore.begin(), textureloadstore.end(), [](const txLoadContainer& a, const txLoadContainer& b) {	return a.priority < b.priority;	});
+		sort(textureloadstore.begin(), textureloadstore.end(), [](const txLoadContainer & a, const txLoadContainer & b)
+		{
+			return a.priority < b.priority;
+		});
 
 		auto tl = textureloadstore.front();
 		textureloadstore.erase(textureloadstore.begin());
 
 
 		for(auto& a : texturestore)
-			if(a.objectname == tl.name) {
+			if(a.objectname == tl.name)
+			{
 				a.handle = glzLoadTexture(tl.filename, tl.filter);
 				return true;
 			}
@@ -157,9 +168,12 @@ namespace GLZ
 	void glzResourcemanager::load_all(void)
 	{
 
-		sort(textureloadstore.begin(), textureloadstore.end(), [](const txLoadContainer& a, const txLoadContainer& b) {	return a.priority < b.priority;	});
+		sort(textureloadstore.begin(), textureloadstore.end(), [](const txLoadContainer & a, const txLoadContainer & b)
+		{
+			return a.priority < b.priority;
+		});
 
-		while(load_one()){}
+		while(load_one()) {}
 
 		return;
 	}
