@@ -37,31 +37,118 @@
 
 namespace GLZ
 {
+	bool processError();
+
+	class SoundResource
+	{
+	public:
+
+		bool mIsInitialized;
+		bool mCanPlaySound;
+		unsigned int idcounter;
+
+
+		SoundResource() :
+			mIsInitialized(false),
+			mCanPlaySound(false)
+		{
+		}
+
+		~SoundResource()
+		{
+		}
+
+		unsigned int getNewId(void)
+		{
+			idcounter++;
+			return idcounter;
+		}
+
+	};
+
+
+	class SoundSource
+	{
+	public:
+
+		ALuint mSourceHandle;
+
+		SoundSource() :
+			mSourceHandle(0)
+		{
+		}
+
+		~SoundSource()
+		{
+			alDeleteSources(1, &mSourceHandle);
+		}
+
+		void init();
+
+		void setPitch(float inPitch)
+		{
+			alGetError();
+			alSourcef(mSourceHandle, AL_PITCH, inPitch / 440.0);
+			processError();
+		}
+
+		void setGain(float inGain)
+		{
+			alGetError();
+			alSourcef(mSourceHandle, AL_GAIN, inGain);
+			processError();
+		}
+
+		void setPosition(vert3 inPosition)
+		{
+			alGetError();
+			alSource3f(mSourceHandle, AL_POSITION, inPosition.x, inPosition.y, inPosition.z);
+			processError();
+		}
+
+		void setPosition(vec3 inVelocity)
+		{
+			alGetError();
+			alSource3f(mSourceHandle, AL_VELOCITY, inVelocity.x, inVelocity.y, inVelocity.z);
+			processError();
+		}
+
+		void setLooping(ALboolean inLooping)
+		{
+			alGetError();
+			alSourcei(mSourceHandle, AL_LOOPING, inLooping);
+			processError();
+		}
+
+	};
+
 	class glzSoundManager
 	{
 	public:
 		glzSoundManager();
 		~glzSoundManager();
 
-	private:
-		struct BufferData
+	public:
+
+		struct SoundBufferData
 		{
 			ALint mALBuffer;
 			std::string mResourceName;
 			std::string mFileName;
 			ALuint mSamplerate;
+			int mUid;
 		};
-
-		bool mIsInitialized;
-		bool mCanPlaySound;
-
-		std::vector<BufferData> mBuffers;
-
 
 	public:
 
+		ALboolean initOpenAL();
 		void initialize();
 		int LoadWAV(std::string inFilename, std::string inResourceName);
+		void setListnerPossition(vert3 inPosition);
+		void setListnerVelocity(vec3 inVelocity);
+		void setListnerOrientation(vec3 inOrientation, vec3 inUp);
+		void setListner(node3 inNode);
 
+		void playSound(SoundSource *inSoundsource, std::string inResourceName);
 	};
 }
