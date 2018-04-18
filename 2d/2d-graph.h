@@ -15,7 +15,7 @@
 // 4. Please do include me in your credits
 
 // glz 2d scenegraph base class - i think it's usefull
-// visit http://www.flashbang.se or contact me at overlord@flashbang.se 
+// visit http://www.flashbang.se or contact me at overlord@flashbang.se
 // the entire toolkit should exist in it's entirety at github
 // https://github.com/zeoverlord/glz.git
 
@@ -24,6 +24,7 @@
 #include "..\utilities\type.h"
 #include "..\utilities\resourcemanager.h"
 #include "..\utilities\vectormath.h"
+#include "..\utilities\node3.h"
 #include "..\utilities\tiletools.h"
 #include "..\utilities\sprite.h"
 #include "..\utilities\color.h"
@@ -40,13 +41,14 @@ namespace GLZ
 
 	class Object2DGraph;
 
-	class Object2D {
-		// position, orientation, speed and such	
+	class Object2D
+	{
+		// position, orientation, speed and such
 
 	public:
 
-		texturecontainer *texture;
-		node3 *n_parent;
+		texturecontainer* texture;
+		node3* n_parent;
 		node3 n_local;
 		int label;
 		glzBlendingMode blend;
@@ -89,7 +91,7 @@ namespace GLZ
 			origin = glzOrigin::BOTTOM_LEFT;
 		}
 
-		virtual void draw(glzCamera2D *camera)
+		virtual void draw(glzCamera2D* camera)
 		{
 			return;
 		}
@@ -110,7 +112,7 @@ namespace GLZ
 			return;
 		}
 
-		virtual void set_r(glzOBject2DSetvar type, Object2DGraph *v)
+		virtual void set_r(glzOBject2DSetvar type, Object2DGraph* v)
 		{
 			return;
 		}
@@ -134,7 +136,7 @@ namespace GLZ
 
 	public:
 
-		virtual void draw(glzCamera2D *camera) override;
+		virtual void draw(glzCamera2D* camera) override;
 		virtual void update(float seconds) override;
 		virtual void set_i(glzOBject2DSetvar type, int v) override;
 		virtual void set_f(glzOBject2DSetvar type, float v) override;
@@ -158,7 +160,7 @@ namespace GLZ
 		}
 
 
-		obj2d_Sprite(int labelin, glzSprite spritein, node3 *nin, node3 nLin, texturecontainer *tex, float scalein)
+		obj2d_Sprite(int labelin, glzSprite spritein, node3* nin, node3 nLin, texturecontainer* tex, float scalein)
 		{
 			label = labelin;
 			sprite = glzSpriteanimationList(spritein);
@@ -176,7 +178,7 @@ namespace GLZ
 		}
 
 
-		obj2d_Sprite(int labelin, glzSpriteanimationList spritein, node3 *nin, node3 nLin, texturecontainer *tex, float scalein, float framespeedin)
+		obj2d_Sprite(int labelin, glzSpriteanimationList spritein, node3* nin, node3 nLin, texturecontainer* tex, float scalein, float framespeedin)
 		{
 			label = labelin;
 			sprite = spritein;
@@ -203,7 +205,7 @@ namespace GLZ
 
 	public:
 
-		virtual void draw(glzCamera2D *camera) override;
+		virtual void draw(glzCamera2D* camera) override;
 		virtual void update(float seconds) override;
 
 
@@ -219,7 +221,7 @@ namespace GLZ
 
 		}
 
-		obj2d_Fullscreen(int labelin, glzSprite spritein, texturecontainer *tex)
+		obj2d_Fullscreen(int labelin, glzSprite spritein, texturecontainer* tex)
 		{
 			label = labelin;
 			sprite = spritein;
@@ -227,7 +229,7 @@ namespace GLZ
 			visible = true;
 
 		}
-		obj2d_Fullscreen(int labelin, glzSprite spritein, glzBlendingMode b, texturecontainer *tex)
+		obj2d_Fullscreen(int labelin, glzSprite spritein, glzBlendingMode b, texturecontainer* tex)
 		{
 			label = labelin;
 			blend = b;
@@ -237,7 +239,7 @@ namespace GLZ
 
 		}
 
-		obj2d_Fullscreen(int labelin, texturecontainer *tex)
+		obj2d_Fullscreen(int labelin, texturecontainer* tex)
 		{
 			label = labelin;
 			sprite = glzSprite();
@@ -246,7 +248,7 @@ namespace GLZ
 
 		}
 
-		obj2d_Fullscreen(int labelin, glzBlendingMode b, texturecontainer *tex)
+		obj2d_Fullscreen(int labelin, glzBlendingMode b, texturecontainer* tex)
 		{
 			label = labelin;
 			blend = b;
@@ -270,7 +272,7 @@ namespace GLZ
 
 
 
-		virtual void draw(glzCamera2D *camera) override;
+		virtual void draw(glzCamera2D* camera) override;
 		virtual void update(float seconds) override;
 
 
@@ -291,7 +293,7 @@ namespace GLZ
 		}
 
 
-		obj2d_Background(int labelin, texturecontainer *tex)
+		obj2d_Background(int labelin, texturecontainer* tex)
 		{
 			label = labelin;
 			texture = tex;
@@ -303,7 +305,7 @@ namespace GLZ
 		}
 
 
-		obj2d_Background(int labelin, glzSprite spritein, float scalein, texturecontainer *tex)
+		obj2d_Background(int labelin, glzSprite spritein, float scalein, texturecontainer* tex)
 		{
 			label = labelin;
 			sprite = glzSpriteanimationList(spritein);
@@ -317,7 +319,7 @@ namespace GLZ
 		}
 
 
-		obj2d_Background(int labelin, glzSpriteanimationList spritein, float scalein, float framespeedin, texturecontainer *tex)
+		obj2d_Background(int labelin, glzSpriteanimationList spritein, float scalein, float framespeedin, texturecontainer* tex)
 		{
 			label = labelin;
 			sprite = spritein;
@@ -326,14 +328,17 @@ namespace GLZ
 			current_animation = 0;
 			current_frame = 0;
 			framespeed = framespeedin;
-			if(framespeedin) animationstate = glzOBject2DAnimationstate::PLAYING;
+			if(framespeedin)
+			{
+				animationstate = glzOBject2DAnimationstate::PLAYING;
+			}
 			frametime = 0.0;
 			visible = true;
 		}
 
 
 
-		obj2d_Background(int labelin, glzSprite spritein, glzBlendingMode b, float scalein, float paralaxin, texturecontainer *tex)
+		obj2d_Background(int labelin, glzSprite spritein, glzBlendingMode b, float scalein, float paralaxin, texturecontainer* tex)
 		{
 			label = labelin;
 			blend = b;
@@ -349,7 +354,7 @@ namespace GLZ
 
 		}
 
-		obj2d_Background(int labelin, glzSpriteanimationList spritein, glzBlendingMode b, float scalein, float framespeedin, float paralaxin, texturecontainer *tex)
+		obj2d_Background(int labelin, glzSpriteanimationList spritein, glzBlendingMode b, float scalein, float framespeedin, float paralaxin, texturecontainer* tex)
 		{
 			label = labelin;
 			blend = b;
@@ -360,7 +365,10 @@ namespace GLZ
 			current_animation = 0;
 			current_frame = 0;
 			framespeed = framespeedin;
-			if(framespeedin) animationstate = glzOBject2DAnimationstate::PLAYING;
+			if(framespeedin)
+			{
+				animationstate = glzOBject2DAnimationstate::PLAYING;
+			}
 			frametime = 0.0;
 			visible = true;
 
@@ -370,7 +378,7 @@ namespace GLZ
 
 	class obj2d_Tiles : public Object2D
 	{
-		glztiles *map;
+		glztiles* map;
 		int layer;
 		int tileWidth;
 		int tileHeight;
@@ -378,7 +386,7 @@ namespace GLZ
 
 	public:
 
-		virtual void draw(glzCamera2D *camera) override;
+		virtual void draw(glzCamera2D* camera) override;
 		virtual void update(float seconds) override;
 		virtual void set_i(glzOBject2DSetvar type, int v) override;
 		virtual void set_f(glzOBject2DSetvar type, float v) override;
@@ -403,7 +411,7 @@ namespace GLZ
 		}
 
 
-		obj2d_Tiles(int labelin, glztiles *mapin, int layerin, int tilewidthin, int tileheightin, float framespeedin, node3 *nin, node3 nLin, texturecontainer *tex, int spritesize, float scalein)
+		obj2d_Tiles(int labelin, glztiles* mapin, int layerin, int tilewidthin, int tileheightin, float framespeedin, node3* nin, node3 nLin, texturecontainer* tex, int spritesize, float scalein)
 		{
 			label = labelin;
 			texture = tex;
@@ -416,12 +424,15 @@ namespace GLZ
 			tileHeight = tileheightin;
 			current_frame = 0;
 			framespeed = framespeedin;
-			if(framespeedin) animationstate = glzOBject2DAnimationstate::PLAYING;
+			if(framespeedin)
+			{
+				animationstate = glzOBject2DAnimationstate::PLAYING;
+			}
 			frametime = 0.0f;
 			blend = glzBlendingMode::ALPHA;
 
-			width = (float)map->width*(spritesize / tilewidthin);
-			height = (float)map->height*(spritesize / tileheightin);
+			width = (float)map->width * (spritesize / tilewidthin);
+			height = (float)map->height * (spritesize / tileheightin);
 			visible = true;
 
 		}
@@ -440,7 +451,7 @@ namespace GLZ
 
 	public:
 
-		virtual void draw(glzCamera2D *camera) override;
+		virtual void draw(glzCamera2D* camera) override;
 		virtual void update(float seconds) override;
 		//	virtual void set_i(glzOBject2DSetvar type, int v) override;
 		//	virtual void set_f(glzOBject2DSetvar type, float v) override;
@@ -459,7 +470,7 @@ namespace GLZ
 		}
 
 
-		obj2d_Text(int labelin, std::string textin, node3 *nin, node3 nLin, texturecontainer *tex, float scalein, float aspectin, float kernin, glzOrigin originin)
+		obj2d_Text(int labelin, std::string textin, node3* nin, node3 nLin, texturecontainer* tex, float scalein, float aspectin, float kernin, glzOrigin originin)
 		{
 			label = labelin;
 			texture = tex;
@@ -490,7 +501,7 @@ namespace GLZ
 
 	public:
 
-		virtual void draw(glzCamera2D *camera) override;
+		virtual void draw(glzCamera2D* camera) override;
 		virtual void update(float seconds) override;
 
 
@@ -527,7 +538,7 @@ namespace GLZ
 
 	public:
 
-		virtual void draw(glzCamera2D *camera) override;
+		virtual void draw(glzCamera2D* camera) override;
 		virtual void update(float seconds) override;
 
 
@@ -559,15 +570,15 @@ namespace GLZ
 	{
 
 	private:
-		Object2DGraph *rendergraph;
+		Object2DGraph* rendergraph;
 
 	public:
 
-		virtual void draw(glzCamera2D *camera) override;
+		virtual void draw(glzCamera2D* camera) override;
 		virtual void update(float seconds) override;
 
 
-		virtual void set_r(glzOBject2DSetvar type, Object2DGraph *v) override;
+		virtual void set_r(glzOBject2DSetvar type, Object2DGraph* v) override;
 		//virtual void set_i(glzOBject2DSetvar type, int v) override;
 		//	virtual void set_f(glzOBject2DSetvar type, float v) override;
 
@@ -577,7 +588,7 @@ namespace GLZ
 			visible = true;
 		}
 
-		obj2d_Object2DGraph(int labelin, Object2DGraph *c)
+		obj2d_Object2DGraph(int labelin, Object2DGraph* c)
 		{
 			label = labelin;
 			rendergraph = c;
@@ -595,8 +606,9 @@ namespace GLZ
 
 
 
-	class Object2DGraph {
-		// position, orientation, speed and such	
+	class Object2DGraph
+	{
+		// position, orientation, speed and such
 
 	private:
 
@@ -606,10 +618,14 @@ namespace GLZ
 
 
 		std::vector<std::shared_ptr<Object2D>> objects;
-		glzCamera2D *camera;
+		glzCamera2D* camera;
 		bool sort_z;
 
-		Object2DGraph(glzCamera2D *cam) { camera = cam; sort_z = false; }
+		Object2DGraph(glzCamera2D* cam)
+		{
+			camera = cam;
+			sort_z = false;
+		}
 
 		template<typename T> // fun with templates
 		void add(T obj)
@@ -625,7 +641,9 @@ namespace GLZ
 			for(auto a : objects)
 			{
 				if(a->visible)
+				{
 					a->draw(camera);
+				}
 			}
 
 
@@ -638,10 +656,15 @@ namespace GLZ
 		{
 
 			for(auto a : objects)
+			{
 				a->update(seconds);
+			}
 
 			if(sort_z)
-				sort(objects.begin(), objects.end(), [](const std::shared_ptr<Object2D>& a, const std::shared_ptr<Object2D>& b) {	return a.get()->z_order < b.get()->z_order;	});
+				sort(objects.begin(), objects.end(), [](const std::shared_ptr<Object2D>& a, const std::shared_ptr<Object2D>& b)
+			{
+				return a.get()->z_order < b.get()->z_order;
+			});
 
 
 
@@ -650,13 +673,15 @@ namespace GLZ
 			auto i = objects.begin();
 
 			// o yes this is way uggly, but i think it works
-			while(i < objects.end()) {
+			while(i < objects.end())
+			{
 
 				if(objects[i2]->tobekilled)
 				{
 					i = objects.erase(i);
 				}
-				else {
+				else
+				{
 					++i;
 					i2++;
 				}
@@ -671,47 +696,47 @@ namespace GLZ
 		void set(int l, glzOBject2DSetvar type)
 		{
 
-			for(auto &a : objects)
+			for(auto& a : objects)
 				if(a->label == l)
 					switch(type)
-				{
-					case glzOBject2DSetvar::ANIMATIONPLAY:
-						a->current_frame = 0;
-						a->frametime = 0.0f;
-						a->animationstate = glzOBject2DAnimationstate::PLAYING;
-						break;
+					{
+						case glzOBject2DSetvar::ANIMATIONPLAY:
+							a->current_frame = 0;
+							a->frametime = 0.0f;
+							a->animationstate = glzOBject2DAnimationstate::PLAYING;
+							break;
 
-					case glzOBject2DSetvar::ANIMATIONSTOP:
-						a->animationstate = glzOBject2DAnimationstate::STOPPED;
-						break;
+						case glzOBject2DSetvar::ANIMATIONSTOP:
+							a->animationstate = glzOBject2DAnimationstate::STOPPED;
+							break;
 
-					case glzOBject2DSetvar::ANIMATIONPLAYONCE:
-						a->current_frame = 0;
-						a->frametime = 0.0f;
-						a->animationstate = glzOBject2DAnimationstate::PLAYINGONCE;
-						break;
+						case glzOBject2DSetvar::ANIMATIONPLAYONCE:
+							a->current_frame = 0;
+							a->frametime = 0.0f;
+							a->animationstate = glzOBject2DAnimationstate::PLAYINGONCE;
+							break;
 
 
-				}
+					}
 		}
 
 
 		void set(int l, glzOBject2DSetvar type, bool v)
 		{
 
-			for(auto &a : objects)
+			for(auto& a : objects)
 				if(a->label == l)
 					switch(type)
-				{
-					case glzOBject2DSetvar::KILL:
-						a->tobekilled = v;
-						break;
+					{
+						case glzOBject2DSetvar::KILL:
+							a->tobekilled = v;
+							break;
 
-					case glzOBject2DSetvar::VISIBLE:
-						a->visible = v;
-						break;
+						case glzOBject2DSetvar::VISIBLE:
+							a->visible = v;
+							break;
 
-				}
+					}
 
 
 
@@ -722,19 +747,19 @@ namespace GLZ
 		void set(int l, glzOBject2DSetvar type, int v)
 		{
 
-			for(auto &a : objects)
+			for(auto& a : objects)
 				if(a->label == l)
 					switch(type)
-				{
+					{
 
-					case glzOBject2DSetvar::CURRENT_ANIMATION:
-						a->current_animation = v;
-						break;
+						case glzOBject2DSetvar::CURRENT_ANIMATION:
+							a->current_animation = v;
+							break;
 
-					case glzOBject2DSetvar::CURRENT_FRAME:
-						a->current_frame = v;
-						break;
-				}
+						case glzOBject2DSetvar::CURRENT_FRAME:
+							a->current_frame = v;
+							break;
+					}
 			return;
 		}
 
@@ -742,31 +767,31 @@ namespace GLZ
 		void set(int l, glzOBject2DSetvar type, float v)
 		{
 
-			for(auto &a : objects)
+			for(auto& a : objects)
 				if(a->label == l)
 					switch(type)
-				{
-					case glzOBject2DSetvar::ALPHA:
-						a->alpha = v;
-						break;
+					{
+						case glzOBject2DSetvar::ALPHA:
+							a->alpha = v;
+							break;
 
-					case glzOBject2DSetvar::SCALE:
-						a->scale = v;
-						break;
+						case glzOBject2DSetvar::SCALE:
+							a->scale = v;
+							break;
 
-					case glzOBject2DSetvar::FRAMESPEED:
-						a->framespeed = v;
-						break;
-					case glzOBject2DSetvar::WIDTH:
-						a->width = v;
-						break;
-					case glzOBject2DSetvar::HEIGHT:
-						a->height = v;
-						break;
-					case glzOBject2DSetvar::Z_LEVEL:
-						a->z_order = v;
-						break;
-				}
+						case glzOBject2DSetvar::FRAMESPEED:
+							a->framespeed = v;
+							break;
+						case glzOBject2DSetvar::WIDTH:
+							a->width = v;
+							break;
+						case glzOBject2DSetvar::HEIGHT:
+							a->height = v;
+							break;
+						case glzOBject2DSetvar::Z_LEVEL:
+							a->z_order = v;
+							break;
+					}
 
 			return;
 		}
@@ -775,77 +800,95 @@ namespace GLZ
 
 		void set(int l, glzOBject2DSetvar type, glzBlendingMode v)
 		{
-			for(auto &a : objects)
+			for(auto& a : objects)
 				if((a->label == l) && (type == glzOBject2DSetvar::BLEND))
+				{
 					a->blend = v;
+				}
 			return;
 		}
 
 		void set(int l, glzOBject2DSetvar type, node3 v)
 		{
-			for(auto &a : objects)
+			for(auto& a : objects)
 				if((a->label == l) && (type == glzOBject2DSetvar::NODE_LOCAL))
+				{
 					a->n_local = v;
+				}
 			return;
 		}
 
-		void set(int l, glzOBject2DSetvar type, node3 *v)
+		void set(int l, glzOBject2DSetvar type, node3* v)
 		{
-			for(auto &a : objects)
+			for(auto& a : objects)
 				if((a->label == l) && (type == glzOBject2DSetvar::NODE_PARENT))
+				{
 					a->n_parent = v;
+				}
 			return;
 		}
 
-		void set(int l, glzOBject2DSetvar type, Object2DGraph *v)
+		void set(int l, glzOBject2DSetvar type, Object2DGraph* v)
 		{
-			for(auto &a : objects)
+			for(auto& a : objects)
 				if((a->label == l) && (type == glzOBject2DSetvar::RENDEREGRAPH))
+				{
 					a->set_r(type, v);
+				}
 			return;
 		}
 
 		void set(int l, glzOBject2DSetvar type, glzColor v)
 		{
-			for(auto &a : objects)
+			for(auto& a : objects)
 				if((a->label == l) && (type == glzOBject2DSetvar::BLENDCOLOR))
+				{
 					a->blendcolor = v;
+				}
 			return;
 		}
 
 		void set(int l, glzOBject2DSetvar type, glzOrigin v)
 		{
-			for(auto &a : objects)
+			for(auto& a : objects)
 				if((a->label == l) && (type == glzOBject2DSetvar::ORIGIN))
+				{
 					a->origin = v;
+				}
 			return;
 		}
 
 		void set(int l, glzOBject2DSetvar type, std::string v)
 		{
-			for(auto &a : objects)
+			for(auto& a : objects)
 				if((a->label == l) && (type == glzOBject2DSetvar::TEXT))
+				{
 					a->set_s(type, v);
+				}
 			return;
 		}
 
 
 		void set(int l, glzOBject2DSetvar type, glzSprite v)
 		{
-			for(auto &a : objects)
+			for(auto& a : objects)
 				if((a->label == l) && (type == glzOBject2DSetvar::SPRITE))
+				{
 					a->set_sp(type, v);
+				}
 			return;
 		}
 
 
 
 
-		void set_tx(int l, glzOBject2DSetvar type, texturecontainer *v)
+		void set_tx(int l, glzOBject2DSetvar type, texturecontainer* v)
 		{
-			for(auto &a : objects)
+			for(auto& a : objects)
 				if((a->label == l) && (type == glzOBject2DSetvar::TEXTURE))
+				{
 					a->texture = v;
+				}
 			return;
 		}
 
@@ -853,9 +896,11 @@ namespace GLZ
 		void kill(int l)
 		{
 
-			for(auto &a : objects)
+			for(auto& a : objects)
 				if(a->label == l)
+				{
 					a->tobekilled = true;
+				}
 			return;
 		}
 
@@ -872,12 +917,12 @@ namespace GLZ
 obj2d_Sprite
 obj2d_Sprite_Animated
 obj2d_Fullscreen
-obj2d_Background 
+obj2d_Background
 obj2d_Tiles
 obj2d_Clear
 
 
-unimplemented 
+unimplemented
 
 
 

@@ -23,12 +23,14 @@
 
 #include <vector>
 #include "..\utilities\vectormath.h"
+#include "..\utilities\node3.h"
 
 
 namespace GLZ
 {
 
-	typedef struct{
+	typedef struct
+	{
 		vert3 pos;
 		vec3 dir;  // motion vector in units per second
 		tex2 tx;
@@ -38,9 +40,10 @@ namespace GLZ
 		float gravity;
 		float weight;
 		bool active;
-	}glzSimpleParticle;
+	} glzSimpleParticle;
 
-	class glzSimpleParticleSystem{
+	class glzSimpleParticleSystem
+	{
 	private:
 
 		float time;
@@ -52,7 +55,10 @@ namespace GLZ
 
 	public:
 		glzSimpleParticleSystem();
-		void set_time(float t) { time = t; }
+		void set_time(float t)
+		{
+			time = t;
+		}
 		void set_environment(float scale_in);
 		void set_clamp(bool clampx_in, bool clampy_in, bool clampz_in);
 
@@ -85,7 +91,8 @@ namespace GLZ
 
 
 
-	typedef struct{
+	typedef struct
+	{
 		node3 p;
 		tex2 t, tscale;
 		glzPrimitive shape;  // how old this particle is, affects the u texture coordinate
@@ -99,5 +106,5 @@ namespace GLZ
 		bool selfGravity;
 		float attract, repulse; // repulstion is a power of two from attraction
 
-	}glzMediumParticle;
+	} glzMediumParticle;
 }

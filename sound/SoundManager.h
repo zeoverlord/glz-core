@@ -26,6 +26,7 @@
 #include "..\utilities\glz.h"
 #include "..\utilities\resourcemanager.h"
 #include "..\utilities\vectormath.h"
+#include "..\utilities\node3.h"
 
 #include <cstdlib>
 #include <iostream>
@@ -149,6 +150,6 @@ namespace GLZ
 		void setListnerOrientation(vec3 inOrientation, vec3 inUp);
 		void setListner(node3 inNode);
 
-		void playSound(SoundSource *inSoundsource, std::string inResourceName);
+		void playSound(SoundSource* inSoundsource, std::string inResourceName);
 	};
 }

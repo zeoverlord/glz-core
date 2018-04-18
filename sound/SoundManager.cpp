@@ -106,9 +106,9 @@ namespace GLZ
 
 	ALboolean glzSoundManager::initOpenAL()
 	{
-		ALDeviceList *pDeviceList = NULL;
-		ALCcontext *pContext = NULL;
-		ALCdevice *pDevice = NULL;
+		ALDeviceList* pDeviceList = NULL;
+		ALCcontext* pContext = NULL;
+		ALCdevice* pDevice = NULL;
 		ALboolean bReturn = AL_FALSE;
 
 		pDeviceList = new ALDeviceList();
@@ -162,7 +162,7 @@ namespace GLZ
 
 	int glzSoundManager::LoadWAV(std::string inFilename, std::string inResourceName)
 	{
-		FILE *fp = NULL;
+		FILE* fp = NULL;
 		fp = fopen(inFilename.c_str(), "rb");
 
 		if(!fp)
@@ -286,17 +286,19 @@ namespace GLZ
 	void glzSoundManager::setListner(node3 inNode)
 	{
 		alGetError();
-		setListnerPossition(inNode.pos);
-		setListnerVelocity(inNode.dir);
+		setListnerPossition(inNode.getPosition());
+		setListnerVelocity(inNode.getDirection());
 
-		vec3 orientation(inNode.m.m[0], inNode.m.m[1], inNode.m.m[2]);
-		vec3 up(inNode.m.m[4], inNode.m.m[5], inNode.m.m[6]);
+		glzMatrix tempMatrix = inNode.getMatrix();
+
+		vec3 orientation(tempMatrix.m[0], tempMatrix.m[1], tempMatrix.m[2]);
+		vec3 up(tempMatrix.m[4], tempMatrix.m[5], tempMatrix.m[6]);
 
 		setListnerOrientation(orientation, up);
 		processError();
 	}
 
-	void glzSoundManager::playSound(SoundSource *inSoundsource, std::string inResourceName)
+	void glzSoundManager::playSound(SoundSource* inSoundsource, std::string inResourceName)
 	{
 		alGetError();
 		if(sri.mCanPlaySound)

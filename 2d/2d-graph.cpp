@@ -35,9 +35,9 @@
 namespace GLZ
 {
 
-static PFNGLACTIVETEXTUREPROC					glActiveTexture;
+	static PFNGLACTIVETEXTUREPROC					glActiveTexture;
 
-	void obj2d_Sprite::draw(glzCamera2D *camera)
+	void obj2d_Sprite::draw(glzCamera2D* camera)
 	{
 
 		glzMatrix m;
@@ -50,8 +50,10 @@ static PFNGLACTIVETEXTUREPROC					glActiveTexture;
 
 		m *= camera->m;
 		if(n_parent != nullptr)
-			m *= n_parent->m;
-		m *= n_local.m;
+		{
+			m *= n_parent->getMatrix();
+		}
+		m *= n_local.getMatrix();
 
 		unsigned int basic_program = glzShaderReurnBasic();
 
@@ -59,7 +61,7 @@ static PFNGLACTIVETEXTUREPROC					glActiveTexture;
 		glzUniform1i(basic_program, "texunit0", 0);
 		glzUniform4f(basic_program, "color", blendcolor.r, blendcolor.g, blendcolor.b, blendcolor.a);
 
-		glzDirectSpriteRender(m, texture->handle, sprite.get_sprite(current_animation, current_frame), width*scale, height*scale, origin);
+		glzDirectSpriteRender(m, texture->handle, sprite.get_sprite(current_animation, current_frame), width * scale, height * scale, origin);
 		glDisable(GL_BLEND);
 		return;
 	}
@@ -68,18 +70,22 @@ static PFNGLACTIVETEXTUREPROC					glActiveTexture;
 	void obj2d_Sprite::update(float seconds)
 	{
 
-		if((framespeed == 0.0) || (animationstate == glzOBject2DAnimationstate::STOPPED)) return;
+		if((framespeed == 0.0) || (animationstate == glzOBject2DAnimationstate::STOPPED))
+		{
+			return;
+		}
 
 
 		int maxframes = sprite.map.at(current_animation).map.size();
 
 
-		frametime += seconds*framespeed;
+		frametime += seconds * framespeed;
 
 
 		while(frametime >= 1.0f)
 		{
-			current_frame++; frametime -= 1.0f;
+			current_frame++;
+			frametime -= 1.0f;
 
 
 			if(current_frame >= maxframes)
@@ -121,7 +127,7 @@ static PFNGLACTIVETEXTUREPROC					glActiveTexture;
 
 	//*** obj2d_Fullscreen ***
 
-	void obj2d_Fullscreen::draw(glzCamera2D *camera)
+	void obj2d_Fullscreen::draw(glzCamera2D* camera)
 	{
 
 		glzMatrix m;
@@ -169,7 +175,7 @@ static PFNGLACTIVETEXTUREPROC					glActiveTexture;
 
 	//*** obj2d_Background ***
 
-	void obj2d_Background::draw(glzCamera2D *camera)
+	void obj2d_Background::draw(glzCamera2D* camera)
 	{
 
 		glzMatrix m;
@@ -184,7 +190,7 @@ static PFNGLACTIVETEXTUREPROC					glActiveTexture;
 
 		vert3 offset;
 
-		offset += n_local.pos;
+		offset += n_local.getPosition();
 		offset.project(camera->m);
 
 		mt.translate(0.0, 0.0, 0.0);
@@ -203,7 +209,7 @@ static PFNGLACTIVETEXTUREPROC					glActiveTexture;
 
 		glzUniform2f(tile_program, "spritepos", tsprite.a.u, tsprite.a.v);
 		glzUniform2f(tile_program, "spritesize", tsprite.d.u - tsprite.a.u, tsprite.d.v - tsprite.a.v);
-		glzUniform2f(tile_program, "spriteoffset", -offset.x*0.5f*paralax, -offset.y*0.5f*paralax);
+		glzUniform2f(tile_program, "spriteoffset", -offset.x * 0.5f * paralax, -offset.y * 0.5f * paralax);
 		glzUniform2f(tile_program, "spritescale", (camera->width / scale) / camera->zoom, (camera->height / scale) / camera->zoom);
 
 
@@ -216,15 +222,19 @@ static PFNGLACTIVETEXTUREPROC					glActiveTexture;
 	void obj2d_Background::update(float seconds)
 	{
 
-		if((framespeed == 0.0) || (animationstate == glzOBject2DAnimationstate::STOPPED)) return;
+		if((framespeed == 0.0) || (animationstate == glzOBject2DAnimationstate::STOPPED))
+		{
+			return;
+		}
 
 		int maxframes = sprite.map.at(current_animation).map.size();
 
-		frametime += seconds*framespeed;
+		frametime += seconds * framespeed;
 
 		while(frametime >= 1.0f)
 		{
-			current_frame++; frametime -= 1.0f;
+			current_frame++;
+			frametime -= 1.0f;
 
 
 			if(current_frame >= maxframes)
@@ -263,7 +273,7 @@ static PFNGLACTIVETEXTUREPROC					glActiveTexture;
 
 	//*** obj2d_Clear ***
 
-	void obj2d_Clear::draw(glzCamera2D *camera)
+	void obj2d_Clear::draw(glzCamera2D* camera)
 	{
 		glClearColor(blendcolor.r, blendcolor.g, blendcolor.b, blendcolor.a);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -278,10 +288,12 @@ static PFNGLACTIVETEXTUREPROC					glActiveTexture;
 
 	//*** obj2d_Object2DGraph ***
 
-	void obj2d_Object2DGraph::draw(glzCamera2D *camera)
+	void obj2d_Object2DGraph::draw(glzCamera2D* camera)
 	{
 		if(rendergraph != nullptr)
+		{
 			rendergraph->draw();
+		}
 		return;
 	}
 
@@ -292,14 +304,14 @@ static PFNGLACTIVETEXTUREPROC					glActiveTexture;
 
 
 
-	void obj2d_Object2DGraph::set_r(glzOBject2DSetvar type, Object2DGraph *v)
+	void obj2d_Object2DGraph::set_r(glzOBject2DSetvar type, Object2DGraph* v)
 	{
 		switch(type)
 		{
 
-		case glzOBject2DSetvar::RENDEREGRAPH:
-			rendergraph = v;
-			break;
+			case glzOBject2DSetvar::RENDEREGRAPH:
+				rendergraph = v;
+				break;
 		}
 		return;
 	}
@@ -309,7 +321,7 @@ static PFNGLACTIVETEXTUREPROC					glActiveTexture;
 
 	//*** obj2d_Tiles ***
 
-	void obj2d_Tiles::draw(glzCamera2D *camera)
+	void obj2d_Tiles::draw(glzCamera2D* camera)
 	{
 
 		glzMatrix m;
@@ -324,8 +336,10 @@ static PFNGLACTIVETEXTUREPROC					glActiveTexture;
 		m *= camera->m;
 
 		if(n_parent != nullptr)
-			m *= n_parent->m;
-		m *= n_local.m;
+		{
+			m *= n_parent->getMatrix();
+		}
+		m *= n_local.getMatrix();
 
 		glActiveTexture = (PFNGLACTIVETEXTUREPROC)wglGetProcAddress("glActiveTexture");
 
@@ -352,7 +366,7 @@ static PFNGLACTIVETEXTUREPROC					glActiveTexture;
 		glBindTexture(GL_TEXTURE_2D, map->tex);
 
 
-		glzDirectSpriteRender(m, map->tex, sprite, width*scale, height*scale, origin);
+		glzDirectSpriteRender(m, map->tex, sprite, width * scale, height * scale, origin);
 
 
 		glDisable(GL_BLEND);
@@ -362,18 +376,22 @@ static PFNGLACTIVETEXTUREPROC					glActiveTexture;
 	void obj2d_Tiles::update(float seconds)
 	{
 
-		if((framespeed == 0.0) || (animationstate == glzOBject2DAnimationstate::STOPPED)) return;
+		if((framespeed == 0.0) || (animationstate == glzOBject2DAnimationstate::STOPPED))
+		{
+			return;
+		}
 
 
 		const int maxframes = 4;
 
 
-		frametime += seconds*framespeed;
+		frametime += seconds * framespeed;
 
 
 		while(frametime >= 1.0f)
 		{
-			current_frame++; frametime -= 1.0f;
+			current_frame++;
+			frametime -= 1.0f;
 
 
 			if(current_frame >= maxframes)
@@ -413,9 +431,9 @@ static PFNGLACTIVETEXTUREPROC					glActiveTexture;
 		switch(type)
 		{
 
-		case glzOBject2DSetvar::SPRITE:
-			sprite = v;
-			break;
+			case glzOBject2DSetvar::SPRITE:
+				sprite = v;
+				break;
 		}
 		return;
 	}
@@ -426,7 +444,7 @@ static PFNGLACTIVETEXTUREPROC					glActiveTexture;
 
 	//*** obj2d_Text ***
 
-	void obj2d_Text::draw(glzCamera2D *camera)
+	void obj2d_Text::draw(glzCamera2D* camera)
 	{
 
 		glzMatrix m;
@@ -441,8 +459,10 @@ static PFNGLACTIVETEXTUREPROC					glActiveTexture;
 		m *= camera->m;
 
 		if(n_parent != nullptr)
-			m *= n_parent->m;
-		m *= n_local.m;
+		{
+			m *= n_parent->getMatrix();
+		}
+		m *= n_local.getMatrix();
 		//m.scale(scale, scale, scale);
 
 		glActiveTexture = (PFNGLACTIVETEXTUREPROC)wglGetProcAddress("glActiveTexture");
@@ -473,9 +493,9 @@ static PFNGLACTIVETEXTUREPROC					glActiveTexture;
 	{
 		switch(type)
 		{
-		case glzOBject2DSetvar::TEXT:
-			text = v;
-			break;
+			case glzOBject2DSetvar::TEXT:
+				text = v;
+				break;
 		}
 		return;
 	}
@@ -483,7 +503,7 @@ static PFNGLACTIVETEXTUREPROC					glActiveTexture;
 
 	//*** obj2d_ColorTint ***
 
-	void obj2d_ColorTint::draw(glzCamera2D *camera)
+	void obj2d_ColorTint::draw(glzCamera2D* camera)
 	{
 
 		glzMatrix m;
